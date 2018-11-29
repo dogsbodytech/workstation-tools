@@ -1,0 +1,29 @@
+# This file is managed by Dogsbody Technology Ltd.
+#   https://www.dogsbody.com/
+#
+# Description:  A script to install the different modular scripts 
+#
+# Usage:  make [all|script-name]
+#
+# Future Enhancements:
+# 	Include a `make clean` command to uninstall scripts
+
+# List of commands that should run even if a file is created with the same name
+.PHONY: all patch-on-startup help sanity_check
+
+# If you pass no rule to `make` it runs the first rule, ensuring this is the help menu.
+default: help
+
+## patch-on-startup	: Install the patch on startup script
+patch-on-startup: 
+	@echo "Installing patch-on-startup"
+
+## all			: Install all scripts provided by this repo
+all: patch-on-startup
+	@echo "All scripts have been installed"
+
+
+# OK This is a nifty bit of self documentation here
+## help			: Print help
+help: Makefile
+	@sed -n 's/^## //p' $<
