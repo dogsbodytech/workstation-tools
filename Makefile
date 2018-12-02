@@ -9,6 +9,7 @@
 # Future Enhancements:
 # 	Include a `make clean` command to uninstall scripts
 # 	Check make version
+#	Support being called from other directories 
 
 # sanity checks
 ifneq ($(shell lsb_release -si),Ubuntu)
@@ -22,9 +23,12 @@ else
 $(error "System is unsupported")
 endif
 
+# Useful variables
+CURRENT_DIR := $(shell pwd)
 
 # List of commands that should run even if a file is created with the same name
 .PHONY: all patch-on-startup help 
+
 
 # help is at the top so it is default
 
@@ -34,10 +38,10 @@ help: Makefile
 	@sed -n 's/^## //p' $<	
 
 ## patch-on-startup	: Install the patch on startup script
-patch-on-startup: 
-	@echo "Installing patch-on-startup"
+patch-on-startup: Makefile
+	@echo "Installing patch-on-startup" 
+	sed 's|$$REPOHOME|${CURRENT_DIR}|g' patch-on-startup/patchonstartup.desktop.template > ~/.config/autostart/patchonstartup.desktop
 	
-
 ## all			: Install all scripts provided by this repo
 all: patch-on-startup
 	@echo "All scripts have been installed"
