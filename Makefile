@@ -37,7 +37,7 @@ CURRENT_DIR := $(shell pwd)
 help: Makefile
 	@sed -n 's/^## //p' $<	
 
-## markdown	: Install the "md" command to mark up markdown files in your terminal.
+## markdown		: Install the "md" command to mark up markdown files in your terminal.
 markdown: Makefile
 	touch ${HOME}/.bash_aliases
 	grep -q -F 'alias md=' ${HOME}/.bash_aliases || echo 'alias md="bash ${CURRENT_DIR}/markdown/md.sh"' >> ${HOME}/.bash_aliases
