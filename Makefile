@@ -37,11 +37,17 @@ CURRENT_DIR := $(shell pwd)
 help: Makefile
 	@sed -n 's/^## //p' $<	
 
+## markdown	: Install the "md" command to mark up markdown files in your terminal.
+markdown: Makefile
+	touch ${HOME}/.bash_aliases
+	grep -q -F 'alias md=' ${HOME}/.bash_aliases || echo 'alias md="bash ${CURRENT_DIR}/markdown/md.sh"' >> ${HOME}/.bash_aliases
+
+
 ## patch-on-startup	: Install the patch on startup script
 patch-on-startup: Makefile
 	@echo "Installing patch-on-startup" 
 	sed 's|$$REPOHOME|${CURRENT_DIR}|g' patch-on-startup/patchonstartup.desktop.template > ~/.config/autostart/patchonstartup.desktop
 	
 ## all			: Install all scripts provided by this repo
-all: patch-on-startup
+all: patch-on-startup markdown
 	@echo "All scripts have been installed"
