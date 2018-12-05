@@ -27,7 +27,7 @@ endif
 CURRENT_DIR := $(shell pwd)
 
 # List of commands that should run even if a file is created with the same name
-.PHONY: all patch-on-startup help 
+.PHONY: all patch-on-startup help markdown
 
 
 # help is at the top so it is default
@@ -39,13 +39,14 @@ help: Makefile
 
 ## markdown		: Install the "md" command to mark up markdown files in your terminal.
 markdown: Makefile
+	@echo "Installing the md command" 
 	touch ${HOME}/.bash_aliases
 	grep -q -F 'alias md=' ${HOME}/.bash_aliases || echo 'alias md="bash ${CURRENT_DIR}/markdown/md.sh"' >> ${HOME}/.bash_aliases
 
 
 ## patch-on-startup	: Install the patch on startup script
 patch-on-startup: Makefile
-	@echo "Installing patch-on-startup" 
+	@echo "Installing the patch-on-startup script" 
 	sed 's|$$REPOHOME|${CURRENT_DIR}|g' patch-on-startup/patchonstartup.desktop.template > ~/.config/autostart/patchonstartup.desktop
 	
 ## all			: Install all scripts provided by this repo
