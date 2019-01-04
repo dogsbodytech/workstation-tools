@@ -44,7 +44,7 @@ waitforapt()
 
 if [ "${1}" = "subscript" ]; then
   # REPOHOME Variable set by make file
-  source $REPOHOME/patch-on-startup/patch-on-startup.config
+  source $REPOHOME/patch-on-startup/settings.local
 
   TEMPFILE=`mktemp`
   # Running sudo now so that it's cached

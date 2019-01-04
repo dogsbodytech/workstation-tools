@@ -54,11 +54,11 @@ markdown: Makefile
 ## patch-on-startup	: Install the patch on startup script
 patch-on-startup: Makefile
 	@echo "Installing the patch-on-startup script" 
-	echo "# WARNING: Do not manually edit" > ${CURRENT_DIR}/patch-on-startup/patch-on-startup.config
-	echo "# File contents are auto-generated via makefile" >> ${CURRENT_DIR}/patch-on-startup/patch-on-startup.config
+	echo "# WARNING: Do not manually edit" > ${CURRENT_DIR}/patch-on-startup/settings.local
+	echo "# File contents are auto-generated via makefile" >> ${CURRENT_DIR}/patch-on-startup/settings.local
 	@echo "This script can update .pem key permissions for you."
 	@echo "Which paths would you like checked? This is a space deliminated array."
-	@read USERINPUT; sed -r 's|([^\ ]*)|"\1"|g; s|^|USER_INPUT_PATHS=(|; s|$$|)|' <<< $${USERINPUT} >> ${CURRENT_DIR}/patch-on-startup/patch-on-startup.config
+	@read USERINPUT; sed -r 's|([^\ ]*)|"\1"|g; s|^|USER_INPUT_PATHS=(|; s|$$|)|' <<< $${USERINPUT} >> ${CURRENT_DIR}/patch-on-startup/settings.local
 	sed 's|$$REPOHOME|${CURRENT_DIR}|g' patch-on-startup/patch-on-startup.sh > ${CURRENT_DIR}/live/patch-on-startup.sh
 	sed 's|$$REPOHOME|${CURRENT_DIR}|g' patch-on-startup/patchonstartup.desktop.template > ~/.config/autostart/patchonstartup.desktop
 	
