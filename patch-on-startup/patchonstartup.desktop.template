@@ -1,6 +1,6 @@
 [Desktop Entry]
 Type=Application
-Exec=sh "$REPOHOME/patch-on-startup/patch-on-startup.sh"
+Exec=sh "$REPOHOME/live/patch-on-startup.sh"
 Hidden=false
 NoDisplay=false
 X-GNOME-Autostart-enabled=true

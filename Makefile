@@ -7,9 +7,9 @@
 # Usage:  make [all|script-name] [OVERRIDE=TRUE]
 #
 # Future Enhancements:
-# 	Include a `make clean` command to uninstall scripts
 # 	Check make version
 #	Support being called from other directories 
+#	Skip user input if variable set
 
 # sanity checks
 ifneq ($(OVERRIDE),TRUE)
@@ -26,6 +26,9 @@ $(error "System is unsupported")
 endif
 
 endif
+
+SHELL=/usr/bin/env bash
+
 
 # Useful variables
 CURRENT_DIR := $(shell pwd)
@@ -51,8 +54,19 @@ markdown: Makefile
 ## patch-on-startup	: Install the patch on startup script
 patch-on-startup: Makefile
 	@echo "Installing the patch-on-startup script" 
+	echo "# WARNING: Do not manually edit" > ${CURRENT_DIR}/patch-on-startup/patch-on-startup.config
+	echo "# File contents are auto-generated via makefile" >> ${CURRENT_DIR}/patch-on-startup/patch-on-startup.config
+	@echo "This script can update .pem key permissions for you."
+	@echo "Which paths would you like checked? This is a space deliminated array."
+	@read USERINPUT; sed -r 's|([^\ ]*)|"\1"|g; s|^|USER_INPUT_PATHS=(|; s|$$|)|' <<< $${USERINPUT} >> ${CURRENT_DIR}/patch-on-startup/patch-on-startup.config
+	sed 's|$$REPOHOME|${CURRENT_DIR}|g' patch-on-startup/patch-on-startup.sh > ${CURRENT_DIR}/live/patch-on-startup.sh
 	sed 's|$$REPOHOME|${CURRENT_DIR}|g' patch-on-startup/patchonstartup.desktop.template > ~/.config/autostart/patchonstartup.desktop
 	
 ## all			: Install all scripts provided by this repo
 all: patch-on-startup markdown
 	@echo "All scripts have been installed"
+
+
+
+
+

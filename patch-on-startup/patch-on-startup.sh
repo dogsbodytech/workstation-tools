@@ -43,6 +43,9 @@ waitforapt()
 }
 
 if [ "${1}" = "subscript" ]; then
+  # REPOHOME Variable set by make file
+  source $REPOHOME/patch-on-startup/patch-on-startup.config
+
   TEMPFILE=`mktemp`
   # Running sudo now so that it's cached
   echo
@@ -85,13 +88,18 @@ if [ "${1}" = "subscript" ]; then
     REMOVE=$(tail -4 /var/log/apt/history.log | grep "^Remove:" | sed 's|^Remove: ||' | xargs -d"," -n1 | column -t | sed 's|^|  |g')
   fi
   echo
-  ## Chmod PEM files - Need to ask user where PEM files are stored.. if any..
-  #echo "Chmodding PEM files"
-  #echo "==================="
-  #if [ -d ${HOME}/key-lococation/ ]; then
-  #  find ${HOME}/key-location/ -type f -name "*.pem" -exec chmod 600 {} + || error
-  #fi
-  #echo
+  # Chmod PEM files - Need to ask user where PEM files are stored.. if any..
+  echo "Chmodding PEM files"
+  echo "==================="
+  # Check user set paths to check
+  if [[ ! -z ${USER_INPUT_PATHS} ]]; then 
+    for userpath in ${USER_INPUT_PATHS[@]}; do
+      if [ -d $userpath ]; then
+        find $userpath -type f -name "*.pem" -exec chmod 600 {} + || error
+      fi
+    done
+  fi
+  echo
   # Check Atom
   if hash atom 2>/dev/null; then
     echo "Checking latest Atom is installed"
