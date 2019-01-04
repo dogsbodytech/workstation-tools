@@ -51,6 +51,13 @@ markdown: Makefile
 	grep -q -F 'alias md=' ${HOME}/.bash_aliases || echo 'alias md="bash ${CURRENT_DIR}/markdown/md.sh"' >> ${HOME}/.bash_aliases
 
 
+## to_uuid		: Install the "to_uuid" command to turn strings into ansible UUID's. 
+to_uuid: Makefile
+	@echo "Installing the to_uuid command" 
+	touch ${HOME}/.bash_aliases
+	chmod +x ${CURRENT_DIR}/to_uuid/to_uuid.py
+	grep -q -F 'alias to_uuid=' ${HOME}/.bash_aliases || echo 'alias to_uuid="${CURRENT_DIR}/to_uuid/to_uuid.py"' >> ${HOME}/.bash_aliases
+
 ## patch-on-startup	: Install the patch on startup script
 patch-on-startup: Makefile
 	@echo "Installing the patch-on-startup script" 
