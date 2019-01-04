@@ -19,6 +19,11 @@ make all
 make patch-on-startup
 ```
 
+If your operating system isn't officially supported you can force the install with:
+```shell
+make OVERRIDE=TRUE
+```
+**Use with care**
 
 Development notes
 -----------------

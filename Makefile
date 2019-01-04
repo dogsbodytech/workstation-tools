@@ -4,7 +4,7 @@
 #
 # Description:  A script to install the different modular scripts 
 #
-# Usage:  make [all|script-name]
+# Usage:  make [all|script-name] [OVERRIDE=TRUE]
 #
 # Future Enhancements:
 # 	Include a `make clean` command to uninstall scripts
@@ -12,6 +12,8 @@
 #	Support being called from other directories 
 
 # sanity checks
+ifneq ($(OVERRIDE),TRUE)
+
 ifneq ($(shell lsb_release -si),Ubuntu)
 $(error "System is unsupported")
 endif
@@ -21,6 +23,8 @@ ifeq ($(OS_VERS),18.04)
 else ifeq ($(OS_VERS),16.04)
 else
 $(error "System is unsupported")
+endif
+
 endif
 
 # Useful variables
