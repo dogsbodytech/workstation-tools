@@ -1,0 +1,93 @@
+.TH "Music Pi command " 1
+.SH "NAME"
+musicpi \- Program for controlling to a local mopidy service.
+.SH "SYNOPSIS"
+.B musicpi
+.I <command>
+.RI [ <arguments> ]
+.SH DESCRIPTION
+musicpi is a wrapper script built ontop of mpc.
+.SH INFORMATION ABOUT SPOTIFY URI
+.TP
+.B \fIspotify:track:<trackid>\fR
+Original Spotify URI format. 
+.TP
+.B \fIhttps://<play/open>.spotify.com/track/<trackid>\fR
+Alternative HTTP spotify formats.
+.TP
+Here by referenced as \fI<SPOTIFYURI>\fR
+
+.SH COMMANDS
+.TP
+.B mute
+Set the volume to 0
+.TP
+.B add \fI<SPOTIFYURI>\fR
+Insert a song and play it
+.TP
+.B insert \fI<SPOTIFYURI>\fR
+Play the selected song after the current one.
+.TP
+.B \fI<SPOTIFYURI>\fR
+Shortcut to insert a song from spotify
+.TP
+.B funk
+Play some funky music
+.TP
+.B help
+Show this help menu
+.TP
+.B radio
+List avaiable radio stations
+.TP
+.B radio \fI<STATION>\fR
+Attempts to load a radio station
+.TP
+.B lsplaylists
+Lists available playlists.
+.TP
+.B load \fI<PLAYLISTNAME>\fR
+Load the selected playlist. Only works with playlists listed with lsplaylists. Use insert or add to load a playlist from a spotify uri.
+.TP
+.B volume \fI[+\-]<NUM>\fR
+Sets the volume to <num> (0-100).  If "+" or "\-" is used, then it adjusts
+the volume relative to the current volume.
+.TP
+.B next \fI[-d]\fR
+Starts playing next song on playlist.
+The \fI-d\fR flag skips the song and marks the song for removal.
+.TP
+.B flagrm
+Flags the current song for removal. Currently this is recorded here "$REPOHOME/var/musicpi-flagged-songs.log"
+.TP
+.B pause
+Pauses playing.
+.TP
+.B setup
+Resets the mopidy server to our prefered set up.
+.TP
+.B playlist
+Prints entire playlist.
+.TP
+.B current
+Prints just the current song name plus artist.
+.TP
+.B stats
+Displays statistics about MPD.
+.TP
+.B stop
+Stops playing.
+.TP
+.B toggle
+Toggles between play and pause. If stopped starts playing. Does not support start playing at song number (use play).
+.TP
+.B version
+Reports the version of MPD.
+.SH "BUGS"
+Report bugs to Dogsbody Technology Ltd. - https://www.dogsbody.com/
+.SH "NOTE"
+Since MPD uses UTF\-8, mpc needs to convert characters to the charset used by the local system. If you get character conversion errors when you're running mpc you probably need to set up your locale. This is done by setting any of the LC_CTYPE, LANG or LC_ALL environment variables (LC_CTYPE only affects character handling).
+.SH "SEE ALSO"
+mpd(1) mpc(1)
+.SH "AUTHOR"
+Robert Hooper

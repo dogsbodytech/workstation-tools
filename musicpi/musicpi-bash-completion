@@ -1,0 +1,38 @@
+# Installation:
+# - If you have system bash completion, place this in /etc/bash_completion.d or
+#   source it from $HOME/.bash_completion
+# - If you don't have system bash completion, source this from your .bashrc
+
+# Escape special characters with backslashes
+# Something like this should (but doesn't) also work:
+# while read -r line; do printf "%q\n" "$line"; done
+
+_musicpi_playlists ()
+{
+    if [[ "$COMP_CWORD" < 3 ]]; then
+        local IFS=$'\n'
+        playlists="$(musicpi lsplaylists)"
+        COMPREPLY=( $(compgen -W "${playlists}" -- ${cur}) )
+    fi
+    return 0
+}
+
+_musicpi() 
+{
+    local cur opts
+    COMPREPLY=()
+    cur="${COMP_WORDS[COMP_CWORD]}"
+    opts="$(cat $REPOHOME/musicpi/musicpi-man | grep 'B ' | cut -c 4- | cut -d'\' -f'1')"
+
+    if [[ "${COMP_CWORD}" < 2 ]]; then
+        COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
+    #     COMPREPLY=( $(compgen -W "${COMP_CWORD}") )
+        return 0
+    fi
+    #COMPREPLY=( $(echo "${COMP_WORDS[1]}"))
+    case "${COMP_WORDS[1]}" in
+    load)	_musicpi_playlists;;
+    esac
+}
+complete -F _musicpi musicpi
+
