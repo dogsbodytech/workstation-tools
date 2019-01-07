@@ -65,10 +65,10 @@ randpw: Makefile
 
 ## from_epoch			: Install the "from_epoch" command which converts time from epoch into gregorian
 from_epoch: Makefile
-        @echo "Installing the from_epoch command" 
-        touch ${HOME}/.bash_aliases
-        chmod +x ${CURRENT_DIR}/from_epoch/from_epoch.py
-        grep -q -F 'alias from_epoch=' ${HOME}/.bash_aliases || echo 'alias from_epoch="${CURRENT_DIR}/from_epoch/from_epoch.py"' >> ${HOME}/.bash_aliases
+	@echo "Installing the from_epoch command" 
+	touch ${HOME}/.bash_aliases
+	chmod +x ${CURRENT_DIR}/from_epoch/from_epoch.py
+	grep -q -F 'alias from_epoch=' ${HOME}/.bash_aliases || echo 'alias from_epoch="${CURRENT_DIR}/from_epoch/from_epoch.py"' >> ${HOME}/.bash_aliases
 
 
 ## patch-on-startup	: Install the patch on startup script
@@ -83,7 +83,7 @@ patch-on-startup: Makefile
 	sed 's|$$REPOHOME|${CURRENT_DIR}|g' patch-on-startup/patchonstartup.desktop.template > ~/.config/autostart/patchonstartup.desktop
 
 ## all			: Install all scripts provided by this repo
-all: patch-on-startup markdown to_uuid randpw
+all: patch-on-startup markdown to_uuid randpw from_epoch
 	@echo "All scripts have been installed"
 
 
