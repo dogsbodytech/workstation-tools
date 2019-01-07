@@ -63,6 +63,14 @@ randpw: Makefile
 	touch ${HOME}/.bash_aliases
 	grep -q -F 'randpw() {\|alias randpw=' ${HOME}/.bash_aliases || echo 'randpw() { for i in 10 16 32 48 64; do echo == $${i} digits ==; apg -a 1 -n 3 -m $${i} -x $${i} -MCLN; done }' >> ${HOME}/.bash_aliases
 
+## from_epoch			: Install the "from_epoch" command which converts time from epoch into gregorian
+from_epoch: Makefile
+        @echo "Installing the from_epoch command" 
+        touch ${HOME}/.bash_aliases
+        chmod +x ${CURRENT_DIR}/from_epoch/from_epoch.py
+        grep -q -F 'alias from_epoch=' ${HOME}/.bash_aliases || echo 'alias from_epoch="${CURRENT_DIR}/from_epoch/from_epoch.py"' >> ${HOME}/.bash_aliases
+
+
 ## patch-on-startup	: Install the patch on startup script
 patch-on-startup: Makefile
 	@echo "Installing the patch-on-startup script" 
@@ -73,7 +81,7 @@ patch-on-startup: Makefile
 	@read USERINPUT; sed -r 's|([^\ ]*)|"\1"|g; s|^|USER_INPUT_PATHS=(|; s|$$|)|' <<< $${USERINPUT} >> ${CURRENT_DIR}/patch-on-startup/settings.local
 	sed 's|$$REPOHOME|${CURRENT_DIR}|g' patch-on-startup/patch-on-startup.sh > ${CURRENT_DIR}/live/patch-on-startup.sh
 	sed 's|$$REPOHOME|${CURRENT_DIR}|g' patch-on-startup/patchonstartup.desktop.template > ~/.config/autostart/patchonstartup.desktop
-	
+
 ## all			: Install all scripts provided by this repo
 all: patch-on-startup markdown to_uuid randpw
 	@echo "All scripts have been installed"
