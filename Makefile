@@ -63,14 +63,14 @@ randpw: Makefile
 	touch ${HOME}/.bash_aliases
 	grep -q -F 'randpw() {\|alias randpw=' ${HOME}/.bash_aliases || echo 'randpw() { for i in 10 16 32 48 64; do echo == $${i} digits ==; apg -a 1 -n 3 -m $${i} -x $${i} -MCLN; done }' >> ${HOME}/.bash_aliases
 
-## from_epoch			: Install the "from_epoch" command which converts time from epoch into gregorian
+## from_epoch		: Install the "from_epoch" command which converts time from epoch into gregorian
 from_epoch: Makefile
 	@echo "Installing the from_epoch command" 
 	touch ${HOME}/.bash_aliases
 	chmod +x ${CURRENT_DIR}/from_epoch/from_epoch.py
 	grep -q -F 'alias from_epoch=' ${HOME}/.bash_aliases || echo 'alias from_epoch="${CURRENT_DIR}/from_epoch/from_epoch.py"' >> ${HOME}/.bash_aliases
 
-## html_character_parser		: Install the "html_character_parser" command which encodes and decodes strings into HTML
+## html_character_parser	: Install the "html_character_parser" command which encodes and decodes strings into HTML
 html_character_parser: Makefile
 	@echo "Installing the html_character_parser command" 
 	touch ${HOME}/.bash_aliases
@@ -92,7 +92,7 @@ musicpi: Makefile
 	touch ${HOME}/.bash_completion
 	sed 's|$$REPOHOME|${CURRENT_DIR}|g' musicpi/spotipi.sh > ${CURRENT_DIR}/live/spotipi.sh
 	sed 's|$$REPOHOME|${CURRENT_DIR}|g' musicpi/musicpi-bash-completion > ${CURRENT_DIR}/live/musicpi-bash-completion
-	grep -q -F 'alias musicpi=' ${HOME}/.bash_aliases || echo 'alias musicpi="${CURRENT_DIR}/live/spotipi.sh"' >> ${HOME}/.bash_aliases
+	grep -q -F 'alias musicpi=' ${HOME}/.bash_aliases || echo 'alias musicpi="bash ${CURRENT_DIR}/live/spotipi.sh"' >> ${HOME}/.bash_aliases
 	grep -q -P 'musicpi/musicpi-bash-completion$$' ${HOME}/.bash_completion || echo '. ${CURRENT_DIR}/live/musicpi-bash-completion' >> ${HOME}/.bash_completion
 
 ## patch-on-startup	: Install the patch on startup script
@@ -107,7 +107,7 @@ patch-on-startup: Makefile
 	sed 's|$$REPOHOME|${CURRENT_DIR}|g' patch-on-startup/patchonstartup.desktop.template > ~/.config/autostart/patchonstartup.desktop
 
 ## all			: Install all scripts provided by this repo
-all: patch-on-startup markdown to_uuid randpw from_epoch html_character_parser
+all: patch-on-startup markdown to_uuid randpw from_epoch html_character_parser musicpi
 	@echo "All scripts have been installed"
 
 
