@@ -34,7 +34,7 @@ SHELL=/usr/bin/env bash
 CURRENT_DIR := $(shell pwd)
 
 # List of commands that should run even if a file is created with the same name
-.PHONY: all patch-on-startup help markdown
+.PHONY: all patch-on-startup help markdown html_character_parser from_epoch
 
 
 # help is at the top so it is default
@@ -70,6 +70,15 @@ from_epoch: Makefile
 	chmod +x ${CURRENT_DIR}/from_epoch/from_epoch.py
 	grep -q -F 'alias from_epoch=' ${HOME}/.bash_aliases || echo 'alias from_epoch="${CURRENT_DIR}/from_epoch/from_epoch.py"' >> ${HOME}/.bash_aliases
 
+## html_character_parser                   : Install the "html_character_parser" command which encodes and decodes strings into HTML
+html_character_parser: Makefile
+        @echo "Installing the html_character_parser command" 
+        touch ${HOME}/.bash_aliases
+        chmod +x ${CURRENT_DIR}/html_character_parser/html_character_parser.py
+        grep -q -F 'alias html_character_parser=' ${HOME}/.bash_aliases || echo 'alias html_character_parser="${CURRENT_DIR}/html_character_parser/html_character_parser.py"' >> ${HOME}/.bash_aliases
+
+
+
 
 ## patch-on-startup	: Install the patch on startup script
 patch-on-startup: Makefile
@@ -83,7 +92,7 @@ patch-on-startup: Makefile
 	sed 's|$$REPOHOME|${CURRENT_DIR}|g' patch-on-startup/patchonstartup.desktop.template > ~/.config/autostart/patchonstartup.desktop
 
 ## all			: Install all scripts provided by this repo
-all: patch-on-startup markdown to_uuid randpw from_epoch
+all: patch-on-startup markdown to_uuid randpw from_epoch html_character_parser
 	@echo "All scripts have been installed"
 
 
