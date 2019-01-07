@@ -77,6 +77,12 @@ html_character_parser: Makefile
 	chmod +x ${CURRENT_DIR}/html_character_parser/html_character_parser.py
 	grep -q -F 'alias html_character_parser=' ${HOME}/.bash_aliases || echo 'alias html_character_parser="${CURRENT_DIR}/html_character_parser/html_character_parser.py"' >> ${HOME}/.bash_aliases
 
+## slackpretty		: Install the "slackpretty" command which turns slacks poor copy paste text into better markup for humans.
+slackpretty: Makefile
+	@echo "Installing the slackpretty command"
+	touch ${HOME}/.bash_aliases
+	grep -q -F 'alias slackpretty=' ${HOME}/.bash_aliases || echo 'alias slackpretty="bash ${CURRENT_DIR}/slackpretty/slackpretty.sh"' >> ${HOME}/.bash_aliases
+
 ## musicpi			: Install the "musicpi" wrapper script to control a mopidy server
 musicpi: Makefile
 	@echo "Installing the musicpi command"
@@ -107,7 +113,7 @@ patch-on-startup: Makefile
 	sed 's|$$REPOHOME|${CURRENT_DIR}|g' patch-on-startup/patchonstartup.desktop.template > ~/.config/autostart/patchonstartup.desktop
 
 ## all			: Install all scripts provided by this repo
-all: patch-on-startup markdown to_uuid randpw from_epoch html_character_parser musicpi
+all: patch-on-startup markdown to_uuid randpw from_epoch html_character_parser musicpi slackpretty
 	@echo "All scripts have been installed"
 
 
