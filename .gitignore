@@ -1,3 +1,5 @@
 /live/*
 !/live/.gitkeep
 /*/settings.local
+/var/*
+!/var/.gitkeep
