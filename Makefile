@@ -74,8 +74,8 @@ from_epoch: Makefile
 html_character_parser: Makefile
 	@echo "Installing the html_character_parser command" 
 	touch ${HOME}/.bash_aliases
-	chmod +x ${CURRENT_DIR}/html_character_parser/html_character_parser.py
-	grep -q -F 'alias html_character_parser=' ${HOME}/.bash_aliases || echo 'alias html_character_parser="${CURRENT_DIR}/html_character_parser/html_character_parser.py"' >> ${HOME}/.bash_aliases
+	chmod +x ${CURRENT_DIR}/html_character_parser/html_character_reference.py
+	grep -q -F 'alias html_character_parser=' ${HOME}/.bash_aliases || echo 'alias html_character_parser="${CURRENT_DIR}/html_character_parser/html_character_reference.py"' >> ${HOME}/.bash_aliases
 
 ## slackpretty		: Install the "slackpretty" command which turns slacks poor copy paste text into better markup for humans.
 slackpretty: Makefile
