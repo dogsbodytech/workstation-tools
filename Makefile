@@ -83,6 +83,19 @@ slackpretty: Makefile
 	touch ${HOME}/.bash_aliases
 	grep -q -F 'alias slackpretty=' ${HOME}/.bash_aliases || echo 'alias slackpretty="bash ${CURRENT_DIR}/slackpretty/slackpretty.sh"' >> ${HOME}/.bash_aliases
 
+## panic-phone		: Install the "panic-phone" tool. Which opens gedit with a custom template + filename. 
+panic-phone: Makefile
+	@echo "Installing the panic-phone tool"
+	hash gedit
+	mkdir -p ${CURRENT_DIR}/var/panic-phone/
+	sed 's|$$REPOHOME|${CURRENT_DIR}|g' ${CURRENT_DIR}/panic-phone/panic-phone.desktop.template > ${CURRENT_DIR}/live/panic-phone.desktop
+	chmod +x ${CURRENT_DIR}/live/panic-phone.desktop
+	chmod +x ${CURRENT_DIR}/panic-phone/panic-phone.sh
+	[[ -r ${CURRENT_DIR}/live/panic-phone-template.txt ]] || cp ${CURRENT_DIR}/panic-phone/message-template.txt ${CURRENT_DIR}/live/panic-phone-template.txt
+	@echo "To customise your phone call template edit ${CURRENT_DIR}/live/panic-phone-template.txt"
+	@echo "We recommend pinning ${CURRENT_DIR}/live/panic-phone.desktop to your desktop launcher/dock"
+
+
 ## musicpi			: Install the "musicpi" wrapper script to control a mopidy server
 musicpi: Makefile
 	@echo "Installing the musicpi command"
@@ -96,8 +109,8 @@ musicpi: Makefile
 	@read USERINPUT; sed -r 's|([^\ ]*)|"\1"|g; s|^|PASS=(|; s|$$|)|' <<< $${USERINPUT} >> ${CURRENT_DIR}/musicpi/settings.local
 	touch ${HOME}/.bash_aliases
 	touch ${HOME}/.bash_completion
-	sed 's|$$REPOHOME|${CURRENT_DIR}|g' musicpi/spotipi.sh > ${CURRENT_DIR}/live/spotipi.sh
-	sed 's|$$REPOHOME|${CURRENT_DIR}|g' musicpi/musicpi-bash-completion > ${CURRENT_DIR}/live/musicpi-bash-completion
+	sed 's|$$REPOHOME|${CURRENT_DIR}|g' ${CURRENT_DIR}/musicpi/spotipi.sh > ${CURRENT_DIR}/live/spotipi.sh
+	sed 's|$$REPOHOME|${CURRENT_DIR}|g' ${CURRENT_DIR}/musicpi/musicpi-bash-completion > ${CURRENT_DIR}/live/musicpi-bash-completion
 	grep -q -F 'alias musicpi=' ${HOME}/.bash_aliases || echo 'alias musicpi="bash ${CURRENT_DIR}/live/spotipi.sh"' >> ${HOME}/.bash_aliases
 	grep -q -P 'musicpi/musicpi-bash-completion$$' ${HOME}/.bash_completion || echo '. ${CURRENT_DIR}/live/musicpi-bash-completion' >> ${HOME}/.bash_completion
 
@@ -109,14 +122,12 @@ patch-on-startup: Makefile
 	@echo "This script can update .pem key permissions for you."
 	@echo "Which paths would you like checked? This is a space deliminated array."
 	@read USERINPUT; sed -r 's|([^\ ]*)|"\1"|g; s|^|USER_INPUT_PATHS=(|; s|$$|)|' <<< $${USERINPUT} >> ${CURRENT_DIR}/patch-on-startup/settings.local
-	sed 's|$$REPOHOME|${CURRENT_DIR}|g' patch-on-startup/patch-on-startup.sh > ${CURRENT_DIR}/live/patch-on-startup.sh
-	sed 's|$$REPOHOME|${CURRENT_DIR}|g' patch-on-startup/patchonstartup.desktop.template > ~/.config/autostart/patchonstartup.desktop
+	sed 's|$$REPOHOME|${CURRENT_DIR}|g' ${CURRENT_DIR}/patch-on-startup/patch-on-startup.sh > ${CURRENT_DIR}/live/patch-on-startup.sh
+	sed 's|$$REPOHOME|${CURRENT_DIR}|g' ${CURRENT_DIR}/patch-on-startup/patchonstartup.desktop.template > ~/.config/autostart/patchonstartup.desktop
 
 ## all			: Install all scripts provided by this repo
 all: patch-on-startup markdown to_uuid randpw from_epoch html_character_parser musicpi slackpretty
 	@echo "All scripts have been installed"
-
-
 
 
 

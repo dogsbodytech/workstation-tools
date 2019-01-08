@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Panic Phone
+Comment=Open up a quick file editor with a template file
+Icon=$REPOHOME/shared/icons/pp-icon.svg
+Exec=$REPOHOME/panic-phone/panic-phone.sh
+Terminal=false
+
