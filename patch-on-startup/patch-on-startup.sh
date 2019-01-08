@@ -58,7 +58,7 @@ if [ "${1}" = "subscript" ]; then
     error
     exit 1
   fi
-  echo 
+  echo
   echo "Getting sudo privilege to install latest updates"
   sudo date
   # If there are problems running `sudo date` then exit.
@@ -130,6 +130,20 @@ if [ "${1}" = "subscript" ]; then
     echo "Not using Cowsay, install it with \`sudo apt-get install cowsay\`"
   fi
   echo
+  echo "Checking workstation tools git repo"
+  echo "==================================="
+  cd $REPOHOME
+  hash stat
+  hash git
+  if [ ! -d "$REPOHOME/.git" ]; then
+    echo "Error: $REPOHOME is not a git repo"
+    GITUPDATE="false"
+    error
+  else
+    GITUPDATE=$(git fetch --quiet)
+    GITUPDATE+=$(git diff origin/master --stat)
+  fi
+  echo
   # Cleanup
   rm "${TEMPFILE}"
   # A nice report to keep Rob happy :-)
@@ -163,6 +177,14 @@ if [ "${1}" = "subscript" ]; then
   fi
   if [[ ${ATOMUPDATENEEDED} ]]; then
     echo "New version of Atom available."
+    echo
+  fi
+  if [[ ${GITUDATE} == "false" ]]; then
+    echo "Warning: The workstation-tools repo is no longer git controlled."
+  elif [[ ${GITUPDATE} ]]; then 
+    echo "The workstation-tools repo is not in-line with master."
+    echo "Changes as follow:"
+    echo "${GITUPDATE}"
     echo
   fi
   echo
