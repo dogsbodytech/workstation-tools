@@ -34,7 +34,7 @@ SHELL=/usr/bin/env bash
 CURRENT_DIR := $(shell pwd)
 
 # List of commands that should run even if a file is created with the same name
-.PHONY: all patch-on-startup help markdown html_character_parser from_epoch
+.PHONY: all patch-on-startup help markdown html_character_parser from_epoch panic-phone to_uuid randpw musicpi slackpretty
 
 
 # help is at the top so it is default
@@ -126,7 +126,7 @@ patch-on-startup: Makefile
 	sed 's|$$REPOHOME|${CURRENT_DIR}|g' ${CURRENT_DIR}/patch-on-startup/patchonstartup.desktop.template > ~/.config/autostart/patchonstartup.desktop
 
 ## all			: Install all scripts provided by this repo
-all: patch-on-startup markdown to_uuid randpw from_epoch html_character_parser musicpi slackpretty
+all: patch-on-startup markdown to_uuid randpw from_epoch html_character_parser musicpi slackpretty panic-phone
 	@echo "All scripts have been installed"
 
 
