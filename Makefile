@@ -61,7 +61,7 @@ to_uuid: Makefile
 randpw: Makefile
 	@echo "Installing the randpw command" 
 	touch ${HOME}/.bash_aliases
-	grep -q -F 'randpw() {\|alias randpw=' ${HOME}/.bash_aliases || echo 'randpw() { for i in 10 16 32 48 64; do echo == $${i} digits ==; apg -a 1 -n 3 -m $${i} -x $${i} -MCLN; done }' >> ${HOME}/.bash_aliases
+	grep -q -P '(randpw\(\) |alias randpw=)' ${HOME}/.bash_aliases || echo 'randpw() { for i in 10 16 32 48 64; do echo == $${i} digits ==; apg -a 1 -n 3 -m $${i} -x $${i} -MCLN; done }' >> ${HOME}/.bash_aliases
 
 ## from_epoch		: Install the "from_epoch" command which converts time from epoch into gregorian
 from_epoch: Makefile
