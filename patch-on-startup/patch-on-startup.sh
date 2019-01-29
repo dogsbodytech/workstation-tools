@@ -51,19 +51,19 @@ if [ "${1}" = "subscript" ]; then
   echo
   echo "Dogsbody Technology Environment Setup"
   echo "====================================="
-  echo "Testing internet access"
-  wget -q http://gb.archive.ubuntu.com/ubuntu/ -O - | grep -q '<title>Index of /ubuntu</title>'
-  if (( ${?} > 0 )); then
-    echo "No internet access"
-    error
-    exit 1
-  fi
-  echo
   echo "Getting sudo privilege to install latest updates"
   sudo date
   # If there are problems running `sudo date` then exit.
   if [ ${?} != 0 ]; then
     echo "Issue getting sudo privileges"
+    error
+    exit 1
+  fi
+  echo
+  echo "Testing internet access"
+  wget -q http://gb.archive.ubuntu.com/ubuntu/ -O - | grep -q '<title>Index of /ubuntu</title>'
+  if (( ${?} > 0 )); then
+    echo "No internet access"
     error
     exit 1
   fi
