@@ -28,7 +28,7 @@ waitforapt()
 {
   i=0
   tput sc
-  while sudo fuser /var/lib/dpkg/lock /var/lib/apt/lists/lock >/dev/null 2>&1 ; do
+  while sudo fuser /var/lib/dpkg/lock /var/lib/dpkg/lock-frontend /var/lib/apt/lists/lock >/dev/null 2>&1 ; do
     case $((${i} % 4)) in
       0 ) j="-" ;;
       1 ) j="\\" ;;
