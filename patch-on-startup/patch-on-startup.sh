@@ -42,6 +42,30 @@ waitforapt()
   done
 }
 
+waitfornetwork()
+{
+  i=0
+  echo "Testing Network Connectivity"
+  echo "Hold S to skip"
+  echo "Hold Q to quit"
+  while ! wget --timeout=3 -q http://gb.archive.ubuntu.com/ubuntu/ -O - | grep -q '<title>Index of /ubuntu</title>' ; do
+    case $((${i} % 4)) in
+      0 ) j="-" ;;
+      1 ) j="\\" ;;
+      2 ) j="|" ;;
+      3 ) j="/" ;;
+    esac
+    echo -en "\r[${j}] Cannot connect to the Ubuntu repos, retrying..." 
+    read -t 0.5 -N1 input
+    if [[ $input == "s" ]] || [[ $input == "S" ]]; then
+      break
+    elif [[ $input == "q" ]] || [[ $input == "Q" ]] ; then
+      exit
+    fi
+    ((i=i+1))
+  done
+}
+
 if [ "${1}" = "subscript" ]; then
   # REPOHOME Variable set by make file
   source $REPOHOME/patch-on-startup/settings.local
@@ -51,13 +75,7 @@ if [ "${1}" = "subscript" ]; then
   echo
   echo "Dogsbody Technology Environment Setup"
   echo "====================================="
-  echo "Testing internet access"
-  wget -q http://gb.archive.ubuntu.com/ubuntu/ -O - | grep -q '<title>Index of /ubuntu</title>'
-  if (( ${?} > 0 )); then
-    echo "No internet access"
-    error
-    exit 1
-  fi
+  waitfornetwork
   echo
   echo "Getting sudo privilege to install latest updates"
   sudo date
@@ -188,7 +206,7 @@ if [ "${1}" = "subscript" ]; then
     echo
   fi
   echo
-  read -p "Press any key to close"
+  read -p "Press enter key to close"
 else
   gnome-terminal --maximize -x bash -c "bash \"${0}\" subscript"
 fi
