@@ -46,8 +46,6 @@ waitfornetwork()
 {
   i=0
   echo "Testing Network Connectivity"
-  echo "Hold S to skip"
-  echo "Hold Q to quit"
   while ! wget --timeout=3 -q http://gb.archive.ubuntu.com/ubuntu/ -O - | grep -q '<title>Index of /ubuntu</title>' ; do
     case $((${i} % 4)) in
       0 ) j="-" ;;
@@ -55,7 +53,7 @@ waitfornetwork()
       2 ) j="|" ;;
       3 ) j="/" ;;
     esac
-    echo -en "\r[${j}] Cannot connect to the Ubuntu repos, retrying..." 
+    echo -en "\r[${j}] Cannot connect to the Ubuntu repos, retrying... hold 's' to skip or 'q' to quit." 
     read -t 0.5 -N1 input
     if [[ $input == "s" ]] || [[ $input == "S" ]]; then
       break
