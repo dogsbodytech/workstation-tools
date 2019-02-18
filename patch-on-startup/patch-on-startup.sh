@@ -164,7 +164,7 @@ if [ "${1}" = "subscript" ]; then
     PACKERCURRENT=$(packer --version | sed -n '1p' | grep -o "[0-9]*\.[0-9]*\.[0-9]*")
     echo "Local Current Version: ${PACKERCURRENT}"
     echo -n "Testing against latest release  "
-    curl -sS https://raw.githubusercontent.com/hashicorp/packer/stable-website/version.txt | grep -o "${PACKERCURRENT}" || PACKERUPDATENEEDED='YES'
+    curl -sS https://releases.hashicorp.com/packer/ | grep "<a href=./packer" | head -n 1  | grep -o "[0-9]*\.[0-9]*\.[0-9]*" | head -n 1 | grep -o "${PACKERCURRENT}" || PACKERUPDATENEEDED='YES'
     echo
   fi
   # Can we use Cowsay?
