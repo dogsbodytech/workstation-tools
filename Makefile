@@ -10,6 +10,7 @@
 # 	Check make version
 #	Support being called from other directories 
 #	Skip user input if variable set
+#	Check MPC is installed before installing musicpi
 
 # sanity checks
 ifneq ($(OVERRIDE),TRUE)
