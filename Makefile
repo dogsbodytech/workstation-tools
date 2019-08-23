@@ -11,6 +11,8 @@
 #	Support being called from other directories 
 #	Skip user input if variable set
 #	Check MPC is installed before installing musicpi
+#	Musicpi install doesn't clear down settings file
+# 	Musicpi install doesn't work for the port
 
 # sanity checks
 ifneq ($(OVERRIDE),TRUE)
@@ -131,9 +133,27 @@ endif
 	mkdir -p ~/.config/autostart
 	sed 's|$$REPOHOME|${CURRENT_DIR}|g' ${CURRENT_DIR}/patch-on-startup/patchonstartup.desktop.template > ~/.config/autostart/patchonstartup.desktop
 
+## freeagent-timer      : Install the freeagent timer script
+freeagent-timer: Makefile
+	@echo "Installing the freeagent timer script"
+	@echo "Please enter your App ID: "
+	@read USERINPUT; sed "s|VARAPPID|$${USERINPUT}|g" ${CURRENT_DIR}/freeagent_timer/freeagent-timer.pl > ${CURRENT_DIR}/live/freeagent-timer.pl
+	@echo "Please enter your App Secret ID: "
+	@read USERINPUT; sed -i "s|VARSECRETID|$${USERINPUT}|g" ${CURRENT_DIR}/live/freeagent-timer.pl
+	@echo "Please enter your App refresh token: "
+	@read USERINPUT; sed -i "s|VARREFRESHTOKEN|$${USERINPUT}|g" ${CURRENT_DIR}/live/freeagent-timer.pl
+	@echo "Please enter your personal freeagent ID: "
+	@read USERINPUT; sed -i "s|VARMYFAID|$${USERINPUT}|g" ${CURRENT_DIR}/live/freeagent-timer.pl
+	@echo "The next two questions are regarding the default timer this script starts."
+	@echo "Please enter the default timer project: "
+	@read USERINPUT; sed -i "s|VARDEFAULTPROJECT|$${USERINPUT}|g" ${CURRENT_DIR}/live/freeagent-timer.pl
+	@echo "Please enter the default timer task ID from that project: "
+	@read USERINPUT; sed -i "s|VARDEFAULTTASK|$${USERINPUT}|g" ${CURRENT_DIR}/live/freeagent-timer.pl
+	grep -q -F 'alias freeagent-timer=' ${HOME}/.bash_aliases || echo 'alias freeagent-timer="perl ${CURRENT_DIR}/live/freeagent-timer.pl"' >> ${HOME}/.bash_aliases
+
 
 ## all			: Install all scripts provided by this repo
-all: patch-on-startup markdown to_uuid randpw from_epoch html_character_parser musicpi slackpretty panic-phone
+all: patch-on-startup markdown to_uuid randpw from_epoch html_character_parser musicpi slackpretty panic-phone freeagent-timer
 	@echo "All scripts have been installed"
 
 
