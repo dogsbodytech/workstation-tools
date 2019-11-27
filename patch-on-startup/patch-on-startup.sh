@@ -238,6 +238,11 @@ if [ "${1}" = "subscript" ]; then
     echo "New version of Packer available."
     echo
   fi
+  # Check the latest kubectx files are pulled down when possible
+  if [ -f $REPOHOME/../dbh_tools/bin/check_repo.sh -a -d $REPOHOME/../kubectx ]; then
+      $REPOHOME/../dbh_tools/bin/check_repo.sh $REPOHOME/../kubectx
+  fi
+
   if [[ ${GITUDATE} == "false" ]]; then
     echo "Warning: The workstation-tools repo is no longer git controlled."
   elif [[ ${GITUPDATE} ]]; then 
