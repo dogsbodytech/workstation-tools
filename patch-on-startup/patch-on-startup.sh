@@ -40,6 +40,7 @@ waitforapt()
     sleep 0.5
     ((i=i+1))
   done
+  echo ""
 }
 
 waitfornetwork()
@@ -62,6 +63,7 @@ waitfornetwork()
     fi
     ((i=i+1))
   done
+  echo ""
 }
 
 if [ "${1}" = "subscript" ]; then
@@ -254,5 +256,5 @@ if [ "${1}" = "subscript" ]; then
   echo
   read -p "Press enter key to close"
 else
-  gnome-terminal --maximize -x bash -c "bash \"${0}\" subscript"
+  gnome-terminal --maximize -- bash -c "bash \"${0}\" subscript"
 fi
