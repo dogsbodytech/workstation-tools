@@ -151,11 +151,9 @@ freeagent-timer: Makefile
 	@echo "Please enter the default timer task ID from that project: "
 	@read USERINPUT; sed -i "s|VARDEFAULTTASK|$${USERINPUT}|g" ${CURRENT_DIR}/live/freeagent-timer.pl
 	grep -q -F 'alias freeagent-timer=' ${HOME}/.bash_aliases || echo 'alias freeagent-timer="perl ${CURRENT_DIR}/live/freeagent-timer.pl"' >> ${HOME}/.bash_aliases
+	@echo "There is a dependancy for perl xml support, you can install this with \"apt install libxml-libxml-perl\""
 
 
 ## all			: Install all scripts provided by this repo
-all: patch-on-startup markdown to_uuid randpw from_epoch html_character_parser musicpi slackpretty panic-phone freeagent-timer
+all: patch-on-startup markdown to_uuid randpw from_epoch html_character_parser musicpi slackpretty panic-phone
 	@echo "All scripts have been installed"
-
-
-
