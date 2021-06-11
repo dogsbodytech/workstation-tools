@@ -2,13 +2,13 @@
 # This file is managed by Dogsbody Technology Ltd.
 #   https://www.dogsbody.com/
 #
-# Description:  A script to install the different modular scripts 
+# Description:  A script to install the different modular scripts
 #
 # Usage:  make [all|script-name] [OVERRIDE=TRUE]
 #
 # Future Enhancements:
 # 	Check make version
-#	Support being called from other directories 
+#	Support being called from other directories
 #	Skip user input if variable set
 #	Check MPC is installed before installing musicpi
 #	Musicpi install doesn't clear down settings file
@@ -38,7 +38,7 @@ SHELL=/usr/bin/env bash
 CURRENT_DIR := $(shell pwd)
 
 # List of commands that should run even if a file is created with the same name
-.PHONY: all patch-on-startup help markdown html_character_parser from_epoch panic-phone to_uuid randpw musicpi slackpretty
+.PHONY: all patch-on-startup help markdown html_character_parser from_epoch panic-phone to_uuid randpw musicpi slackpretty dbtzoom
 
 
 # help is at the top so it is default
@@ -50,33 +50,33 @@ help: Makefile
 
 ## markdown		: Install the "md" command to mark up markdown files in your terminal.
 markdown: Makefile
-	@echo "Installing the md command" 
+	@echo "Installing the md command"
 	touch ${HOME}/.bash_aliases
 	grep -q -F 'alias md=' ${HOME}/.bash_aliases || echo 'alias md="bash ${CURRENT_DIR}/markdown/md.sh"' >> ${HOME}/.bash_aliases
 
-## to_uuid			: Install the "to_uuid" command to turn strings into ansible UUID's. 
+## to_uuid			: Install the "to_uuid" command to turn strings into ansible UUID's.
 to_uuid: Makefile
-	@echo "Installing the to_uuid command" 
+	@echo "Installing the to_uuid command"
 	touch ${HOME}/.bash_aliases
 	chmod +x ${CURRENT_DIR}/to_uuid/to_uuid.py
 	grep -q -F 'alias to_uuid=' ${HOME}/.bash_aliases || echo 'alias to_uuid="${CURRENT_DIR}/to_uuid/to_uuid.py"' >> ${HOME}/.bash_aliases
 
 ## randpw			: Install the "randpw" command which autogenerates random passwords
 randpw: Makefile
-	@echo "Installing the randpw command" 
+	@echo "Installing the randpw command"
 	touch ${HOME}/.bash_aliases
 	grep -q -P '(randpw\(\) |alias randpw=)' ${HOME}/.bash_aliases || echo 'randpw() { for i in 16 24 32 48; do echo == $${i} digits ==; apg -a 1 -n 5 -m $${i} -x $${i} -MCLN; done }' >> ${HOME}/.bash_aliases
 
 ## from_epoch		: Install the "from_epoch" command which converts time from epoch into gregorian
 from_epoch: Makefile
-	@echo "Installing the from_epoch command" 
+	@echo "Installing the from_epoch command"
 	touch ${HOME}/.bash_aliases
 	chmod +x ${CURRENT_DIR}/from_epoch/from_epoch.py
 	grep -q -F 'alias from_epoch=' ${HOME}/.bash_aliases || echo 'alias from_epoch="${CURRENT_DIR}/from_epoch/from_epoch.py"' >> ${HOME}/.bash_aliases
 
 ## html_character_parser	: Install the "html_character_parser" command which encodes and decodes strings into HTML
 html_character_parser: Makefile
-	@echo "Installing the html_character_parser command" 
+	@echo "Installing the html_character_parser command"
 	touch ${HOME}/.bash_aliases
 	chmod +x ${CURRENT_DIR}/html_character_parser/html_character_reference.py
 	grep -q -F 'alias html_character_parser=' ${HOME}/.bash_aliases || echo 'alias html_character_parser="${CURRENT_DIR}/html_character_parser/html_character_reference.py"' >> ${HOME}/.bash_aliases
@@ -87,7 +87,7 @@ slackpretty: Makefile
 	touch ${HOME}/.bash_aliases
 	grep -q -F 'alias slackpretty=' ${HOME}/.bash_aliases || echo 'alias slackpretty="bash ${CURRENT_DIR}/slackpretty/slackpretty.sh"' >> ${HOME}/.bash_aliases
 
-## panic-phone		: Install the "panic-phone" tool. Which opens gedit with a custom template + filename. 
+## panic-phone		: Install the "panic-phone" tool. Which opens gedit with a custom template + filename.
 panic-phone: Makefile
 	@echo "Installing the panic-phone tool"
 	hash gedit
@@ -120,7 +120,7 @@ musicpi: Makefile
 
 ## patch-on-startup	: Install the patch on startup script
 patch-on-startup: Makefile
-	@echo "Installing the patch-on-startup script" 
+	@echo "Installing the patch-on-startup script"
 ifeq ($(shell [[ -r ${CURRENT_DIR}/patch-on-startup/settings.local ]] && echo "exists"),exists)
 	@echo "Config file already exists, skipping config prompts."
 else
@@ -152,6 +152,14 @@ freeagent-timer: Makefile
 	@read USERINPUT; sed -i "s|VARDEFAULTTASK|$${USERINPUT}|g" ${CURRENT_DIR}/live/freeagent-timer.pl
 	grep -q -F 'alias freeagent-timer=' ${HOME}/.bash_aliases || echo 'alias freeagent-timer="perl ${CURRENT_DIR}/live/freeagent-timer.pl"' >> ${HOME}/.bash_aliases
 	@echo "There is a dependancy for perl xml support, you can install this with \"apt install libxml-libxml-perl\""
+
+## dbtzoom			: Install the "dbtzoom" shortcut to open a zoom meeting
+dbtzoom: Makefile
+	@echo "Installing the dbtzoom command"
+	touch ${HOME}/.bash_aliases
+	@read -p "What is the Zoom Meeting ID? " ROOMID; \
+	read -p "What is the HTML encoded password for this room? " ROOMPASSWORD; \
+	grep -q -P '(dbtzoom\(\) |alias dbtzoom=)' ${HOME}/.bash_aliases || echo "alias dbtzoom='xdg-open \"https://us02web.zoom.us/j/$$ROOMID?pwd=$$ROOMPASSWORD\"'" >> ${HOME}/.bash_aliases
 
 
 ## all			: Install all scripts provided by this repo
