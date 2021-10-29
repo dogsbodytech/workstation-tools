@@ -163,5 +163,5 @@ dbtzoom: Makefile
 
 
 ## all			: Install all scripts provided by this repo
-all: patch-on-startup markdown to_uuid randpw from_epoch html_character_parser musicpi slackpretty panic-phone
+all: patch-on-startup markdown to_uuid randpw from_epoch html_character_parser musicpi slackpretty panic-phone dbtzoom
 	@echo "All scripts have been installed"
