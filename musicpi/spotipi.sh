@@ -57,6 +57,17 @@ mpcwrap()
   fi
 }
 
+# Sanitise Spotify URL
+clean_spotify_url()
+{
+  local STRING=$1
+  STRING=${STRING//https:\/\/*\.spotify\.com/spotify}
+  STRING=${STRING%\?*}
+  STRING=${STRING////:}
+  mpcwrap insert "$STRING"
+  exit
+}
+
 # Defining subcommands
 case "$ARG1" in
   mute)
@@ -124,13 +135,11 @@ case "$ARG1" in
       ;;
       # Spotify URL Input =
       https://play.spotify.com*)
-        TMP=${ARG2//https:\/\/play.spotify.com/spotify}
-        mpcwrap insert "${TMP////:}"
+        clean_spotify_url "$ARG2"
         exit
       ;;
       https://open.spotify.com*)
-        TMP=${ARG2//https:\/\/open.spotify.com/spotify}
-        mpcwrap insert "${TMP////:}"
+        clean_spotify_url "$ARG2"
         exit
       ;;
     esac
@@ -143,13 +152,11 @@ case "$ARG1" in
   ;;
   # Spotify URL Input
   https://play.spotify.com*)
-    TMP=${ARG1//https:\/\/play.spotify.com/spotify}
-    mpcwrap insert "${TMP////:}"
+    clean_spotify_url "$ARG1"
     exit
   ;;
   https://open.spotify.com*)
-    TMP=${ARG1//https:\/\/open.spotify.com/spotify}
-    mpcwrap insert "${TMP////:}"
+    clean_spotify_url "$ARG1"
     exit
   ;;
   setup)
