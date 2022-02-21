@@ -64,8 +64,8 @@ clean_spotify_url()
   STRING=${STRING//https:\/\/*\.spotify\.com/spotify}
   STRING=${STRING%\?*}
   STRING=${STRING////:}
-  mpcwrap insert "$STRING"
-  exit
+  # Return sanitised string
+  echo "${STRING}"
 }
 
 # Defining subcommands
@@ -134,29 +134,25 @@ case "$ARG1" in
         exit
       ;;
       # Spotify URL Input =
-      https://play.spotify.com*)
-        clean_spotify_url "$ARG2"
+      https://*.spotify.com*)
+        mpcwrap insert $(clean_spotify_url "$ARG2")
         exit
       ;;
-      https://open.spotify.com*)
-        clean_spotify_url "$ARG2"
-        exit
+      *)
+        echo "ERROR: Unknown argument: $ARG2"
+        exit 4
       ;;
     esac
     exit 1
   ;;
   # Catch spotify uris and redirect to insert
-  spotify*)
+  spotify:*)
     mpcwrap insert "$ARG1"
     exit
   ;;
   # Spotify URL Input
-  https://play.spotify.com*)
-    clean_spotify_url "$ARG1"
-    exit
-  ;;
-  https://open.spotify.com*)
-    clean_spotify_url "$ARG1"
+  https://*.spotify.com*)
+    mpcwrap insert $(clean_spotify_url "$ARG1")
     exit
   ;;
   setup)
