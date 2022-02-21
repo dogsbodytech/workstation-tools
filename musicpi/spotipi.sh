@@ -146,7 +146,7 @@ case "$ARG1" in
     exit 1
   ;;
   # Catch spotify uris and redirect to insert
-  spotify:*)
+  spotify*)
     mpcwrap insert "$ARG1"
     exit
   ;;
