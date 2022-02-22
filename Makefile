@@ -103,14 +103,18 @@ panic-phone: Makefile
 ## musicpi			: Install the "musicpi" wrapper script to control a mopidy server
 musicpi: Makefile
 	@echo "Installing the musicpi command"
+# wildcard = empty string if the file doesn't exist
+ifeq ($(wildcard ${CURRENT_DIR}/patch-on-startup/settings.local), "")
+	@echo "No saved config"
 	echo "# WARNING: Do not manually edit" > ${CURRENT_DIR}/patch-on-startup/settings.local
 	echo "# File contents are auto-generated via makefile" >> ${CURRENT_DIR}/patch-on-startup/settings.local
 	@echo "What is the IP address of your mopidy instance? (Default: localhost)"
 	@read USERINPUT; sed -r 's|([^\ ]*)|"\1"|g; s|^|ADDR=(|; s|$$|)|' <<< $${USERINPUT} >> ${CURRENT_DIR}/musicpi/settings.local
-	@echo "What is the port for this instance? (Default: 6060)"
-	@read USERINPUT; sed -r 's|([^\ ]*)|"\1"|g; s|^|PASS=(|; s|$$|)|' <<< $${USERINPUT} >> ${CURRENT_DIR}/musicpi/settings.local
+	#@echo "What is the port for this instance? (Default: 6060)"
+	#@read USERINPUT; sed -r 's|([^\ ]*)|"\1"|g; s|^|PASS=(|; s|$$|)|' <<< $${USERINPUT} >> ${CURRENT_DIR}/musicpi/settings.local
 	@echo "What is the password for this instance? (Default: blank)"
 	@read USERINPUT; sed -r 's|([^\ ]*)|"\1"|g; s|^|PASS=(|; s|$$|)|' <<< $${USERINPUT} >> ${CURRENT_DIR}/musicpi/settings.local
+endif
 	touch ${HOME}/.bash_aliases
 	touch ${HOME}/.bash_completion
 	sed 's|$$REPOHOME|${CURRENT_DIR}|g' ${CURRENT_DIR}/musicpi/spotipi.sh > ${CURRENT_DIR}/live/spotipi.sh
