@@ -22,7 +22,8 @@ $(error "System is unsupported")
 endif
 
 OS_VERS:=$(shell lsb_release -sr )
-ifeq ($(OS_VERS),20.04)
+ifeq ($(OS_VERS),22.04)
+else ifeq ($(OS_VERS),20.04)
 else ifeq ($(OS_VERS),18.04)
 else ifeq ($(OS_VERS),16.04)
 else
