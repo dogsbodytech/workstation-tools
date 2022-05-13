@@ -38,7 +38,7 @@ SHELL=/usr/bin/env bash
 CURRENT_DIR := $(shell pwd)
 
 # List of commands that should run even if a file is created with the same name
-.PHONY: all patch-on-startup help markdown html_character_parser from_epoch panic-phone to_uuid randpw musicpi slackpretty dbtzoom
+.PHONY: all patch-on-startup help markdown html_character_parser from_epoch panic-phone to_uuid randpw musicpi slackpretty dbtzoom twofactorauth
 
 
 # help is at the top so it is default
@@ -165,7 +165,11 @@ dbtzoom: Makefile
 	read -p "What is the HTML encoded password for this room? " ROOMPASSWORD; \
 	grep -q -P '(dbtzoom\(\) |alias dbtzoom=)' ${HOME}/.bash_aliases || echo "alias dbtzoom='xdg-open \"https://us02web.zoom.us/j/$$ROOMID?pwd=$$ROOMPASSWORD\"'" >> ${HOME}/.bash_aliases
 
+twofactorauth: Makefile
+	@echo "Installing 2fa alias"
+	touch ${HOME}/.bash_aliases
+	grep -q -P 'dbtoauth\(\)' ${HOME}/.bash_aliases || echo 'dbtoauth() { tty=$$(tty); oathtool --totp --base32 "$$@" | tee $${tty} | xclip -i -selection clipboard; }' >> ${HOME}/.bash_aliases
 
 ## all			: Install all scripts provided by this repo
-all: patch-on-startup markdown to_uuid randpw from_epoch html_character_parser musicpi slackpretty panic-phone dbtzoom
+all: patch-on-startup markdown to_uuid randpw from_epoch html_character_parser musicpi slackpretty panic-phone dbtzoom twofactorauth
 	@echo "All scripts have been installed"
