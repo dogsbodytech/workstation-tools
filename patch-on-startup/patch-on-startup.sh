@@ -106,6 +106,11 @@ if [ "${1}" = "subscript" ]; then
     UPGRADES=$(tail -4 /var/log/apt/history.log | grep "^Upgrade:" | sed 's|^Upgrade: ||' | xargs -d"," -n2 | column -t | sed 's|^|  |g')
   fi
   echo
+  # Updating Snaps
+  echo "Updating Snaps"
+  echo "=============="
+  sudo snap refresh --color=always --unicode=always --abs-time || error
+  echo
   # Cleanup
   echo "Cleanup"
   echo "======="
