@@ -101,7 +101,7 @@ if [ "${1}" = "subscript" ]; then
   echo "========"
   waitforapt
   sudo apt-get -y dist-upgrade | tee ${TEMPFILE} || error
-  if ! grep -q '^0 to upgrade, 0 to newly install, 0 to remove and 0 not to upgrade' ${TEMPFILE}; then
+  if ! grep -q '^0 to upgrade, 0 to newly install,' ${TEMPFILE}; then
     INSTALLS=$(tail -4 /var/log/apt/history.log | grep "^Install:" | sed 's|^Install: ||' | xargs -d"," -n2 | column -t | sed 's|^|  |g')
     UPGRADES=$(tail -4 /var/log/apt/history.log | grep "^Upgrade:" | sed 's|^Upgrade: ||' | xargs -d"," -n2 | column -t | sed 's|^|  |g')
   fi
