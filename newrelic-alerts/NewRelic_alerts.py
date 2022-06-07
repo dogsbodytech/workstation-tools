@@ -23,11 +23,16 @@ CONDITIONS_URL = "https://infra-api.newrelic.com/v2/alerts/conditions"
 
 # Headers must be case insensitive for the request commands below
 headers = CaseInsensitiveDict()
-headers["Api-Key"] = ""
+headers["Api-Key"] = input("Enter in the NR Accounts API key: ")
 headers["Content-Type"] = "application/json"
 
 # Opens and converts the New Relic json config into a python dictionary
-DATA_FILE = open('NR-alert-config.json',)
+print("\nIf you are using another json file, please enter in the name. Otherwise leave the field blank to use the default json file.\n")
+JSON_FILE = input("JSON file name: ")
+if JSON_FILE:
+	DATA_FILE = open(JSON_FILE,)
+else:
+	DATA_FILE = open('NR-alert-config.json',)
 DATA = json.load(DATA_FILE)
 
 # Function to test if the API commands were successful and print the error message if they weren't
@@ -40,28 +45,31 @@ def response(x, y):
 		print("\n")
 
 CHANNEL_INFO = requests.get(CHANNEL_URL, headers=headers).json()
+EMAIL_NAME = DATA['EMAIL']['channel']['name']
+PUSHOVER_NAME = DATA['PUSHOVER']['channel']['name']
 POLICY_INFO = requests.get(POLICY_URL, headers=headers).json()
+POLICY_NAME = DATA['POLICY']['policy']['name']
 CONDITIONS_INFO = requests.get(CONDITIONS_URL, headers=headers).json() 
 
 # Creates the alert notification channels and policy by converting the dictionary back into json
 
-if "Awab Email Test" not in str(CHANNEL_INFO):
+if EMAIL_NAME not in str(CHANNEL_INFO):
 	EMAIL_CHANNEL = requests.post(CHANNEL_URL, headers=headers, json=DATA['EMAIL'])
-	response(EMAIL_CHANNEL, y="EMAIL CHANNEL")
+	response(EMAIL_CHANNEL, y=EMAIL_NAME)
 else:
-	print("Awab Email Test channel already exists in this NewRelic account")
+	print(f"{EMAIL_NAME} channel already exists in this NewRelic account")
 
-if "Dogsbody Pushover" not in str(CHANNEL_INFO):
+if PUSHOVER_NAME not in str(CHANNEL_INFO):
 	PUSHOVER_CHANNEL = requests.post(CHANNEL_URL, headers=headers, json=DATA['PUSHOVER'])
-	response(PUSHOVER_CHANNEL, y="PUSHOVER CHANNEL")
+	response(PUSHOVER_CHANNEL, y=PUSHOVER_NAME)
 else:
-	print("Dogsbody Pushover channel already exists in this NewRelic account")
+	print(f"{PUSHOVER_NAME} channel already exists in this NewRelic account")
 
-if "Alert Dogsbody - TEST" not in str(POLICY_INFO):
+if POLICY_NAME not in str(POLICY_INFO):
 	POLICY_OBJECT = requests.post(POLICY_URL, headers=headers, json=DATA['POLICY'])
-	response(POLICY_OBJECT, y="POLICY")
+	response(POLICY_OBJECT, y=POLICY_NAME)
 else:
-	print("Alert Dogsbody - TEST policy already exists in this NewRelic account")
+	print(f"{POLICY_NAME} policy already exists in this NewRelic account")
 
 # Converts the notification channel/policy data from json into a dictionary to allow extraction of the ID's into variables for the next request
 POLICY_INFO = requests.get(POLICY_URL, headers=headers).json()
@@ -69,16 +77,16 @@ CHANNEL_INFO = requests.get(CHANNEL_URL, headers=headers).json()
 
 for a in POLICY_INFO.values():
 	for b in a:
-		if b['name'] == "Alert Dogsbody - TEST":
+		if b['name'] == POLICY_NAME:
 			POLICY_ID = b['id']
 
 for c in CHANNEL_INFO.values():
 	for d in c:
 		if d == 'channel.policy_ids':
 			break
-		elif d['name'] == "Awab Email Test":
+		elif d['name'] == EMAIL_NAME:
 			EMAIL_CHANNEL_ID = d['id']
-		elif d['name'] == "Dogsbody Pushover":
+		elif d['name'] == PUSHOVER_NAME:
 			PUSHOVER_CHANNEL_ID = d['id']
 
 # Adds the ID's into the main dictionary
