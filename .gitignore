@@ -3,3 +3,4 @@
 /*/settings.local
 /var/*
 !/var/.gitkeep
+/newrelic-alerts/NR-alert-config.json
