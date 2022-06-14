@@ -39,7 +39,7 @@ SHELL=/usr/bin/env bash
 CURRENT_DIR := $(shell pwd)
 
 # List of commands that should run even if a file is created with the same name
-.PHONY: all patch-on-startup help markdown html_character_parser from_epoch panic-phone to_uuid randpw musicpi slackpretty dbtzoom twofactorauth
+.PHONY: all patch-on-startup help markdown html_character_parser from_epoch panic-phone to_uuid randpw musicpi slackpretty dbtzoom twofactorauth newrelic_alerts
 
 
 # help is at the top so it is default
@@ -171,6 +171,11 @@ twofactorauth: Makefile
 	touch ${HOME}/.bash_aliases
 	grep -q -P 'dbtoauth\(\)' ${HOME}/.bash_aliases || echo 'dbtoauth() { tty=$$(tty); oathtool --totp --base32 "$$@" | tee $${tty} | xclip -i -selection clipboard; }' >> ${HOME}/.bash_aliases
 
+newrelic_alerts: Makefile
+	@echo "Installing Newrelic Alerts"
+	touch ${HOME}/.bash_aliases
+	grep -q -F 'alias configure_newrelic_alerts=' ${HOME}/.bash_aliases || echo 'alias configure_newrelic_alerts="python3 ${CURRENT_DIR}/newrelic-alerts/NewRelic_alerts.py"' >> ${HOME}/.bash_aliases
+
 ## all			: Install all scripts provided by this repo
-all: patch-on-startup markdown to_uuid randpw from_epoch html_character_parser musicpi slackpretty panic-phone dbtzoom twofactorauth
+all: patch-on-startup markdown to_uuid randpw from_epoch html_character_parser musicpi slackpretty panic-phone dbtzoom twofactorauth newrelic_alerts
 	@echo "All scripts have been installed"
