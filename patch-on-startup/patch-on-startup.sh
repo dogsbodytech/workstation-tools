@@ -116,7 +116,7 @@ if [ "${1}" = "subscript" ]; then
   echo "======="
   waitforapt
   sudo apt-get -y autoremove | tee ${TEMPFILE} || error
-  if ! grep -q '^0 to upgrade, 0 to newly install, 0 to remove and 0 not to upgrade' ${TEMPFILE}; then
+  if ! grep -q '^0 to upgrade, 0 to newly install,' ${TEMPFILE}; then
     REMOVE=$(tail -4 /var/log/apt/history.log | grep "^Remove:" | sed 's|^Remove: ||' | xargs -d"," -n1 | column -t | sed 's|^|  |g')
   fi
   echo
