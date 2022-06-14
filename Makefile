@@ -121,7 +121,7 @@ endif
 	sed 's|$$REPOHOME|${CURRENT_DIR}|g' ${CURRENT_DIR}/musicpi/spotipi.sh > ${CURRENT_DIR}/live/spotipi.sh
 	sed 's|$$REPOHOME|${CURRENT_DIR}|g' ${CURRENT_DIR}/musicpi/musicpi-bash-completion > ${CURRENT_DIR}/live/musicpi-bash-completion
 	grep -q -F 'alias musicpi=' ${HOME}/.bash_aliases || echo 'alias musicpi="bash ${CURRENT_DIR}/live/spotipi.sh"' >> ${HOME}/.bash_aliases
-	grep -q -P 'musicpi/musicpi-bash-completion$$' ${HOME}/.bash_completion || echo '. ${CURRENT_DIR}/live/musicpi-bash-completion' >> ${HOME}/.bash_completion
+	grep -q -P 'live/musicpi-bash-completion$$' ${HOME}/.bash_completion || echo '. ${CURRENT_DIR}/live/musicpi-bash-completion' >> ${HOME}/.bash_completion
 
 ## patch-on-startup	: Install the patch on startup script
 patch-on-startup: Makefile
