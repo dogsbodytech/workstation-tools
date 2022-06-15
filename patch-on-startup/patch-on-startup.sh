@@ -86,6 +86,11 @@ if [ "${1}" = "subscript" ]; then
     exit 1
   fi
   echo
+  # Updating Snaps
+  echo "Updating Snaps"
+  echo "=============="
+  sudo snap refresh --color=always --unicode=always --abs-time || error
+  echo
   # apt-get update does not produce an exit codes for some errors
   # we want to pause on warnings and errors too
   echo "Getting Updates"
@@ -105,11 +110,6 @@ if [ "${1}" = "subscript" ]; then
     INSTALLS=$(tail -4 /var/log/apt/history.log | grep "^Install:" | sed 's|^Install: ||' | xargs -d"," -n2 | column -t | sed 's|^|  |g')
     UPGRADES=$(tail -4 /var/log/apt/history.log | grep "^Upgrade:" | sed 's|^Upgrade: ||' | xargs -d"," -n2 | column -t | sed 's|^|  |g')
   fi
-  echo
-  # Updating Snaps
-  echo "Updating Snaps"
-  echo "=============="
-  sudo snap refresh --color=always --unicode=always --abs-time || error
   echo
   # Cleanup
   echo "Cleanup"
