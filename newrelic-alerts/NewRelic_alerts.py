@@ -6,14 +6,12 @@
 # Description: A script to automate the process of setting up New Relic alerts
 #
 # Notes:
-# 	- Enter API key and json file name outside of script
-#	- If no json file is given, default is used
-#	- Commit to https://github.com/dogsbodytech/workstation-tools/
-#	- Write wiki documentation
+#	- 
 
 import requests
 import json
 import itertools
+import argparse
 from requests.structures import CaseInsensitiveDict
 
 # Defines the required New Relic API links
@@ -21,14 +19,20 @@ CHANNEL_URL = "https://api.newrelic.com/v2/alerts_channels.json"
 POLICY_URL = "https://api.newrelic.com/v2/alerts_policies.json"
 CONDITIONS_URL = "https://infra-api.newrelic.com/v2/alerts/conditions"
 
+# Uses argsparser to create enviroment variables that can be given with the script
+parser = argparse.ArgumentParser(description='New Relic')
+parser.add_argument('api-key', type=str, help="API Key for New Relic account")
+parser.add_argument('--json-file', type=str, metavar='', help="If you wish to read from another json file, please enter it's full name...")
+args = parser.parse_args()
+
 # Headers must be case insensitive for the request commands below
 headers = CaseInsensitiveDict()
-headers["Api-Key"] = input("Enter in the NR Accounts API key: ")
+headers["Api-Key"] = args.api-key
 headers["Content-Type"] = "application/json"
 
 # Opens and converts the New Relic json config into a python dictionary
 print("\nIf you are using another json file, please enter in the name. Otherwise leave the field blank to use the default json file.\n")
-JSON_FILE = input("JSON file name: ")
+JSON_FILE = args.json-file
 if JSON_FILE:
 	DATA_FILE = open(JSON_FILE,)
 else:
