@@ -86,11 +86,30 @@ if [ "${1}" = "subscript" ]; then
     exit 1
   fi
   echo
+
   # Updating Snaps
-  echo "Updating Snaps"
-  echo "=============="
-  sudo snap refresh --color=always --unicode=always --abs-time || error
-  echo
+  if hash snap 2>/dev/null; then
+    echo "Updating Snaps"
+    echo "=============="
+    sudo snap refresh --color=always --unicode=always --abs-time || error
+    echo
+  else
+    echo "Snap is not installed."
+    echo
+  fi
+
+  # Updating Flatpaks
+  if hash flatpak 2>/dev/null; then
+    echo "Updating Flatpaks"
+    echo "=============="
+    sudo flatpak update --noninteractive
+    echo
+  else
+    echo "Flatpak is not installed."
+    echo
+  fi
+
+
   # apt-get update does not produce an exit codes for some errors
   # we want to pause on warnings and errors too
   echo "Getting Updates"
