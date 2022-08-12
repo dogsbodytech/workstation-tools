@@ -101,7 +101,7 @@ if [ "${1}" = "subscript" ]; then
   # Updating Flatpaks
   if hash flatpak 2>/dev/null; then
     echo "Updating Flatpaks"
-    echo "=============="
+    echo "================="
     sudo flatpak update --noninteractive
     echo
   else
