@@ -1,0 +1,122 @@
+{
+	"EMAIL": {
+		"channel": {
+			"name": "Sysadmin Email",
+			"type": "Email",
+			"configuration": {
+				"recipients": "example@email.co.uk",
+				"include_json_attachment": false
+			}
+		}
+	},
+	"PUSHOVER": {
+		"channel": {
+			"name": "Sysadmin Pushover",
+			"type": "Webhook",
+			"configuration": {
+				"base_url": "https://webhook01.com/v1/newrelic_newalert"
+			}
+		}
+	},
+	"POLICY": {
+		"policy": {
+			"incident_preference": "PER_CONDITION",
+			"name": "Alert Sysadmin Team"
+		}
+	},
+	"CPU_CONFIG": {
+		"data": {
+			"type": "infra_metric",
+			"name": "High CPU",
+			"enabled": false,
+			"policy_id": 0,
+			"event_type": "SystemSample",
+			"select_value": "cpuPercent",
+			"comparison": "above",
+			"critical_threshold": {
+				"value": 80,
+				"duration_minutes": 15,
+				"time_function": "any"
+			},
+			"warning_threshold": {
+				"value": 60,
+				"duration_minutes": 20,
+				"time_function": "any"
+			}
+		}
+	},
+	"IO_CONFIG": {
+		"data": {
+			"type": "infra_metric",
+   			"name": "High Disk IO",
+   			"enabled": false,
+   			"policy_id": 0,
+   			"event_type": "SystemSample",
+   			"select_value": "diskUtilizationPercent",
+   			"comparison": "above",
+   			"critical_threshold": {
+   				"value": 20,
+   				"duration_minutes": 120,
+   				"time_function": "any"
+   			},
+   			"warning_threshold": {
+   				"value": 50,
+   				"duration_minutes": 10,
+   				"time_function": "any"
+   			}
+   		}
+	},
+	"DISK_CONFIG": {
+		"data":{
+			"type":"infra_metric",
+			"name":"Disk Space",
+			"enabled":false,
+			"policy_id": 0,
+			"event_type":"SystemSample",
+			"select_value":"diskUsedPercent",
+			"comparison":"above",
+			"critical_threshold":{
+				"value":85,
+				"duration_minutes":5,
+				"time_function":"any"
+			},
+			"warning_threshold": {
+				"value":70,
+				"duration_minutes":20,
+				"time_function":"any"
+			}
+		}
+	},
+	"MEMORY_CONFIG": {
+		"data": {
+			"type": "infra_metric",
+			"name": "Memory Usage",
+			"enabled": false,
+			"policy_id": 0,
+			"event_type": "SystemSample",
+			"select_value": "memoryUsedPercent",
+			"comparison": "above",
+			"critical_threshold": {
+				"value": 90,
+				"duration_minutes": 5,
+				"time_function": "any"
+			},
+			"warning_threshold": {
+				"value": 70,
+				"duration_minutes": 10,
+				"time_function": "any"
+			}
+		}
+	},
+	"HOST_CONFIG": {
+		"data": {
+			"type": "infra_host_not_reporting",
+			"name": "Host Not Reporting",
+			"enabled": false,
+			"policy_id": 0,
+			"critical_threshold": {
+				"duration_minutes": 10
+			}
+		}
+	}
+}	
