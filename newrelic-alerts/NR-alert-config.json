@@ -1,7 +1,7 @@
 {
 	"EMAIL": {
 		"channel": {
-			"name": "Dogsbody Support",
+			"name": "Sysadmin Email",
 			"type": "Email",
 			"configuration": {
 				"recipients": "example@email.co.uk",
@@ -11,7 +11,7 @@
 	},
 	"PUSHOVER": {
 		"channel": {
-			"name": "Dogsbody Pushover",
+			"name": "Sysadmin Pushover",
 			"type": "Webhook",
 			"configuration": {
 				"base_url": "https://webhook01.com/v1/newrelic_newalert"
@@ -21,7 +21,7 @@
 	"POLICY": {
 		"policy": {
 			"incident_preference": "PER_CONDITION",
-			"name": "Alert Dogsbody"
+			"name": "Alert Sysadmin Team"
 		}
 	},
 	"CPU_CONFIG": {
