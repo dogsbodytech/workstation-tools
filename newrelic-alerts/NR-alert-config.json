@@ -56,7 +56,7 @@
    			"comparison": "above",
    			"critical_threshold": {
    				"value": 20,
-   				"duration_minutes": 240,
+   				"duration_minutes": 120,
    				"time_function": "any"
    			},
    			"warning_threshold": {
