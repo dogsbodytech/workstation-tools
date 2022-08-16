@@ -12,6 +12,7 @@ import requests
 import json
 import itertools
 import argparse
+import os
 from requests.structures import CaseInsensitiveDict
 
 # Defines the required New Relic API links
@@ -21,23 +22,26 @@ CONDITIONS_URL = "https://infra-api.newrelic.com/v2/alerts/conditions"
 
 # Uses argsparser to create enviroment variables that can be given with the script
 parser = argparse.ArgumentParser(description='New Relic')
-parser.add_argument('api-key', type=str, help="API Key for New Relic account")
+parser.add_argument('api-key', type=str, help="API Key for New Relic account, Should look like NRAK-[A-Z0-9]{27}")
 parser.add_argument('--json-file', type=str, metavar='', help="If you wish to read from another json file, please enter it's full name...")
 args = parser.parse_args()
 
 # Headers must be case insensitive for the request commands below
 headers = CaseInsensitiveDict()
-headers["Api-Key"] = args.api-key
+# parse_args passes api-key weirdly, var looks like: Namespace(json_file=None, **{'api-key': 'NRAK-***********'})
+headers["Api-Key"] = vars(args)['api-key']
 headers["Content-Type"] = "application/json"
 
 # Opens and converts the New Relic json config into a python dictionary
-print("\nIf you are using another json file, please enter in the name. Otherwise leave the field blank to use the default json file.\n")
-JSON_FILE = args.json-file
-if JSON_FILE:
-	DATA_FILE = open(JSON_FILE,)
+if args.json_file:
+	DATA_FILE = args.json_file
 else:
-	DATA_FILE = open('NR-alert-config.json',)
-DATA = json.load(DATA_FILE)
+	DATA_FILE = os.path.dirname(os.path.realpath(__file__))+'/NR-alert-config.json'
+
+print("Loading "+DATA_FILE)
+with open(DATA_FILE) as f:
+	DATA = json.load(f)
+
 
 # Function to test if the API commands were successful and print the error message if they weren't
 def response(x, y):
