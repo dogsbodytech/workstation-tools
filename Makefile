@@ -176,6 +176,11 @@ newrelic_alerts: Makefile
 	touch ${HOME}/.bash_aliases
 	grep -q -F 'alias configure_newrelic_alerts=' ${HOME}/.bash_aliases || echo 'alias configure_newrelic_alerts="python3 ${CURRENT_DIR}/newrelic-alerts/NewRelic_alerts.py"' >> ${HOME}/.bash_aliases
 
+logcheck-tool: Makefile
+	@echo "Installing logcheck-tool"
+	touch ${HOME}/.bash_aliases
+	grep -q -F 'alias logcheck-tool=' ${HOME}/.bash_aliases || echo 'alias logcheck-tool="python3 ${CURRENT_DIR}/logcheck-tool/logcheck-tool.py"' >> ${HOME}/.bash_aliases
+
 ## all			: Install all scripts provided by this repo
 all: patch-on-startup markdown to_uuid randpw from_epoch html_character_parser musicpi slackpretty panic-phone dbtzoom twofactorauth newrelic_alerts
 	@echo "All scripts have been installed"

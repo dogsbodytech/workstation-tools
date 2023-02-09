@@ -4,7 +4,7 @@
 			"name": "Sysadmin Email",
 			"type": "Email",
 			"configuration": {
-				"recipients": "example@email.co.uk",
+				"recipients": "sysadmin@dogsbody.com",
 				"include_json_attachment": false
 			}
 		}
@@ -14,7 +14,7 @@
 			"name": "Sysadmin Pushover",
 			"type": "Webhook",
 			"configuration": {
-				"base_url": "https://webhook01.com/v1/newrelic_newalert"
+				"base_url": "https://webhook01.dogsbodytechnology.com/v1/newrelic_newalert"
 			}
 		}
 	},
