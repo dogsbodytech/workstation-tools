@@ -151,28 +151,6 @@ if [ "${1}" = "subscript" ]; then
     done
   fi
   echo
-  # Check Atom
-  if hash atom 2>/dev/null; then
-    echo "Checking latest Atom is installed"
-    echo "================================="
-    ATOMCURRENT=$(atom --version | sed -n '1p' | grep -o "[0-9]*\.[0-9]*\.[0-9]*")
-    # Following url redirects to latest version
-    echo "Local Current Version: ${ATOMCURRENT}"
-    echo -n "Testing against latest release  "
-    curl --silent https://github.com/atom/atom/releases/latest | grep -o "${ATOMCURRENT}" || ATOMUPDATENEEDED='YES'
-    echo
-  fi
-  # Check Terraform
-  if hash terraform 2>/dev/null; then
-    echo "Checking latest Terraform is installed"
-    echo "================================="
-    TFCURRENT=$(terraform --version | sed -n '1p' | grep -o "[0-9]*\.[0-9]*\.[0-9]*")
-    # Following url redirects to latest version
-    echo "Local Current Version: ${TFCURRENT}"
-    echo -n "Testing against latest release  "
-    curl --silent https://github.com/hashicorp/terraform/releases/latest | grep -o "${TFCURRENT}" || TFUPDATENEEDED='YES'
-    echo
-  fi
   # Check Vagrant
   if hash vagrant 2>/dev/null; then
     echo "Checking latest Vagrant is installed"
@@ -181,16 +159,6 @@ if [ "${1}" = "subscript" ]; then
     echo "Local Current Version: ${VAGRANTCURRENT}"
     echo -n "Testing against latest release  "
     curl -sS https://raw.githubusercontent.com/hashicorp/vagrant/stable-website/version.txt | grep -o "${VAGRANTCURRENT}" || VAGRANTUPDATENEEDED='YES'
-    echo
-  fi
-  # Check Packer
-  if hash packer 2>/dev/null; then
-    echo "Checking latest Packer is installed"
-    echo "================================="
-    PACKERCURRENT=$(packer --version | sed -n '1p' | grep -o "[0-9]*\.[0-9]*\.[0-9]*")
-    echo "Local Current Version: ${PACKERCURRENT}"
-    echo -n "Testing against latest release  "
-    curl -sS https://releases.hashicorp.com/packer/ | grep "<a href=./packer" | head -n 1 | grep -o "${PACKERCURRENT}" || PACKERUPDATENEEDED='YES'
     echo
   fi
   # Can we use Cowsay?
@@ -248,20 +216,8 @@ if [ "${1}" = "subscript" ]; then
     echo "${REMOVE}"
     echo
   fi
-  if [[ ${ATOMUPDATENEEDED} ]]; then
-    echo "New version of Atom available."
-    echo
-  fi
-  if [[ ${TFUPDATENEEDED} ]]; then
-    echo "New version of Terraform available."
-    echo
-  fi
   if [[ ${VAGRANTUPDATENEEDED} ]]; then
     echo "New version of Vagrant available."
-    echo
-  fi
-  if [[ ${PACKERUPDATENEEDED} ]]; then
-    echo "New version of Packer available."
     echo
   fi
   # Check the latest kubectx files are pulled down when possible
