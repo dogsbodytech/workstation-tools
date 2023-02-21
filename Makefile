@@ -166,16 +166,19 @@ dbtzoom: Makefile
 	read -p "What is the HTML encoded password for this room? " ROOMPASSWORD; \
 	grep -q -P '(dbtzoom\(\) |alias dbtzoom=)' ${HOME}/.bash_aliases || echo "alias dbtzoom='xdg-open \"https://us02web.zoom.us/j/$$ROOMID?pwd=$$ROOMPASSWORD\"'" >> ${HOME}/.bash_aliases
 
+## twofactorauth		: Install the "dbtoauth" shortcut to simplify 2fa
 twofactorauth: Makefile
 	@echo "Installing 2fa alias"
 	touch ${HOME}/.bash_aliases
 	grep -q -P 'dbtoauth\(\)' ${HOME}/.bash_aliases || echo 'dbtoauth() { tty=$$(tty); oathtool --totp --base32 "$$@" | tee $${tty} | xclip -i -selection clipboard; }' >> ${HOME}/.bash_aliases
 
+## newrelic_alerts		: Install the new relic alerts setup script
 newrelic_alerts: Makefile
 	@echo "Installing Newrelic Alerts"
 	touch ${HOME}/.bash_aliases
 	grep -q -F 'alias configure_newrelic_alerts=' ${HOME}/.bash_aliases || echo 'alias configure_newrelic_alerts="python3 ${CURRENT_DIR}/newrelic-alerts/NewRelic_alerts.py"' >> ${HOME}/.bash_aliases
 
+## logcheck-tool		: Install the logcheck setup tool
 logcheck-tool: Makefile
 	@echo "Installing logcheck-tool"
 	touch ${HOME}/.bash_aliases
