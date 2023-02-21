@@ -139,7 +139,7 @@ endif
 	mkdir -p ~/.config/autostart
 	sed 's|$$REPOHOME|${CURRENT_DIR}|g' ${CURRENT_DIR}/patch-on-startup/patchonstartup.desktop.template > ~/.config/autostart/patchonstartup.desktop
 
-## freeagent-timer	: Install the freeagent timer script
+## freeagent-timer		: Install the freeagent timer script
 freeagent-timer: Makefile
 	@echo "Installing the freeagent timer script"
 	@echo "Please enter your App ID: "
