@@ -170,7 +170,7 @@ dbtzoom: Makefile
 twofactorauth: Makefile
 	@echo "Installing 2fa alias"
 	touch ${HOME}/.bash_aliases
-	grep -q -P 'dbtoauth\(\)' ${HOME}/.bash_aliases || echo 'dbtoauth() { tty=$$(tty); oathtool --totp --base32 "$$@" | tee $${tty} | xclip -i -selection clipboard; }' >> ${HOME}/.bash_aliases
+	grep -q -P 'dbtoauth\(\)' ${HOME}/.bash_aliases || echo 'dbtoauth() { tty=$$(tty); oathtool --totp --base32 "$$@" | tee $${tty} | xclip -i -selection clipboard; echo "Copied to clipboard!"; }' >> ${HOME}/.bash_aliases
 
 ## newrelic_alerts		: Install the new relic alerts setup script
 newrelic_alerts: Makefile
