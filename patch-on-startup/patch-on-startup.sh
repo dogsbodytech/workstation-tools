@@ -47,7 +47,7 @@ waitfornetwork()
 {
   i=0
   echo "Testing Network Connectivity"
-  while ! wget --timeout=3 -q http://gb.archive.ubuntu.com/ubuntu/ -O - | grep -q '<title>Index of /ubuntu</title>' ; do
+  while ! curl --fail -s -m 3 http://connectivity-check.ubuntu.com/; do
     case $((${i} % 4)) in
       0 ) j="-" ;;
       1 ) j="\\" ;;
