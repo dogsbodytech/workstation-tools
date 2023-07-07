@@ -155,7 +155,7 @@ freeagent-timer: Makefile
 	@read USERINPUT; sed -i "s|VARDEFAULTPROJECT|$${USERINPUT}|g" ${CURRENT_DIR}/live/freeagent-timer.pl
 	@echo "Please enter the default timer task ID from that project: "
 	@read USERINPUT; sed -i "s|VARDEFAULTTASK|$${USERINPUT}|g" ${CURRENT_DIR}/live/freeagent-timer.pl
-	grep -q -F 'alias freeagent-timer=' ${HOME}/.bash_aliases || echo 'alias freeagent-timer="perl ${CURRENT_DIR}/live/freeagent-timer.pl"' >> ${HOME}/.bash_aliases
+	@grep -q -F 'alias freeagent-timer=' ${HOME}/.bash_aliases || echo 'alias freeagent-timer="perl ${CURRENT_DIR}/live/freeagent-timer.pl"' >> ${HOME}/.bash_aliases
 	@echo "There is a dependancy for perl xml support, you can install this with \"apt install libxml-libxml-perl\""
 
 ## dbtzoom			: Install the "dbtzoom" shortcut to open a zoom meeting
