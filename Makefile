@@ -142,11 +142,11 @@ endif
 ## freeagent-timer		: Install the freeagent timer script
 freeagent-timer: Makefile
 	@echo "Installing the freeagent timer script"
-	@echo "Please enter your App ID: "
+	@echo "Please enter your OAuth Identifier: "
 	@read USERINPUT; sed "s|VARAPPID|$${USERINPUT}|g" ${CURRENT_DIR}/freeagent_timer/freeagent-timer.pl > ${CURRENT_DIR}/live/freeagent-timer.pl
-	@echo "Please enter your App Secret ID: "
+	@echo "Please enter your OAuth Secret ID: "
 	@read USERINPUT; sed -i "s|VARSECRETID|$${USERINPUT}|g" ${CURRENT_DIR}/live/freeagent-timer.pl
-	@echo "Please enter your App refresh token: "
+	@echo "Please enter your App Refresh Token: "
 	@read USERINPUT; sed -i "s|VARREFRESHTOKEN|$${USERINPUT}|g" ${CURRENT_DIR}/live/freeagent-timer.pl
 	@echo "Please enter your personal freeagent ID: "
 	@read USERINPUT; sed -i "s|VARMYFAID|$${USERINPUT}|g" ${CURRENT_DIR}/live/freeagent-timer.pl
@@ -156,7 +156,8 @@ freeagent-timer: Makefile
 	@echo "Please enter the default timer task ID from that project: "
 	@read USERINPUT; sed -i "s|VARDEFAULTTASK|$${USERINPUT}|g" ${CURRENT_DIR}/live/freeagent-timer.pl
 	@grep -q -F 'alias freeagent-timer=' ${HOME}/.bash_aliases || echo 'alias freeagent-timer="perl ${CURRENT_DIR}/live/freeagent-timer.pl"' >> ${HOME}/.bash_aliases
-	@echo "There is a dependancy for perl xml support, you can install this with \"apt install libxml-libxml-perl\""
+	@echo "Dependancy for perl xml, please install this with \"sudo apt install libxml-libxml-perl\""
+	@echo "Install complete"
 
 ## dbtzoom			: Install the "dbtzoom" shortcut to open a zoom meeting
 dbtzoom: Makefile
