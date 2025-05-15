@@ -1,15 +1,18 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-SRC="$HOME"
+SRC="$HOME/"
 DEST="$HOME/MyFiles/dotfiles"
 
 mkdir -p "$DEST"
 
-shopt -s dotglob nullglob
-for item in "$SRC"/.*; do
-  name=$(basename "$item")
-  [[ "$name" == "." || "$name" == ".." ]] && continue
-  [[ "$name" == ".cache" || "$name" == ".local" ]] && continue
-  cp -a "$item" "$DEST/"
-done
+rsync -a --delete \
+  --exclude=".cache" \
+  --exclude=".local" \
+  --exclude=".Trash" \
+  --exclude=".gvfs" \
+  --exclude=".dbus" \
+  --exclude=".config/google-chrome" \
+  --exclude=".mozilla/firefox" \
+  --exclude=".thumbnails" \
+  "$SRC" "$DEST"
