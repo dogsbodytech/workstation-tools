@@ -224,8 +224,13 @@ if [ "${1}" = "subscript" ]; then
   if [ -f $REPOHOME/../dbh_tools/bin/check_repo.sh -a -d $REPOHOME/../kubectx ]; then
       $REPOHOME/../dbh_tools/bin/check_repo.sh $REPOHOME/../kubectx
   fi
-
-  if [[ ${GITUDATE} == "false" ]]; then
+  # Backup dotfiles
+  echo "Backing up dotfiles to MyFiles/dotfiles"
+  echo "======================================="
+  "$REPOHOME/patch-on-startup/backup-dotfiles.sh" || echo "Dotfiles backup failed"
+  echo
+  # Final summary and prompt
+  if [[ ${GITUPDATE} == "false" ]]; then
     echo "Warning: The workstation-tools repo is no longer git controlled."
   elif [[ ${GITUPDATE} ]]; then 
     echo "The workstation-tools repo is not in-line with master."
