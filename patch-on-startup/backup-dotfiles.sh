@@ -10,6 +10,6 @@ shopt -s dotglob nullglob
 for item in "$SRC"/.*; do
   name=$(basename "$item")
   [[ "$name" == "." || "$name" == ".." ]] && continue
-  [[ "$name" == ".cache" || "$name" == ".local/share/Trash" ]] && continue
+  [[ "$name" == ".cache" || "$name" == ".local" ]] && continue
   cp -a "$item" "$DEST/"
 done
