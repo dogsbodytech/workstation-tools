@@ -32,13 +32,11 @@ endif
 
 SHELL=/usr/bin/env bash
 
-
 # Useful variables
 CURRENT_DIR := $(shell pwd)
 
 # List of commands that should run even if a file is created with the same name
-.PHONY: default all patch-on-startup help to_uuid randpw slackpretty dbtzoom twofactorauth logcheck-tool
-
+.PHONY: default all patch-on-startup help to_uuid randpw slackpretty dbtzoom twofactorauth
 
 # help is at the top so it is default
 
@@ -118,9 +116,9 @@ twofactorauth: Makefile
 	grep -q -P 'dbtoauth\(\)' ${HOME}/.bash_aliases || echo 'dbtoauth() { tty=$$(tty); oathtool --totp --base32 "$$@" | tee $${tty} | xclip -i -selection clipboard; echo "Copied to clipboard!"; }' >> ${HOME}/.bash_aliases
 
 ## default			: Install core scripts provided by this repo
-default: patch-on-startup to_uuid randpw slackpretty dbtzoom twofactorauth logcheck-tool
+default: patch-on-startup to_uuid randpw slackpretty twofactorauth
 	@echo "Default scripts have been installed"
 
 ## all			: Install all scripts provided by this repo
-all: patch-on-startup to_uuid randpw slackpretty dbtzoom twofactorauth logcheck-tool
+all: patch-on-startup to_uuid randpw slackpretty freeagent-timer dbtzoom twofactorauth 
 	@echo "All scripts have been installed"
