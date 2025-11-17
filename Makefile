@@ -37,7 +37,7 @@ SHELL=/usr/bin/env bash
 CURRENT_DIR := $(shell pwd)
 
 # List of commands that should run even if a file is created with the same name
-.PHONY: default all patch-on-startup help html_character_parser to_uuid randpw slackpretty dbtzoom twofactorauth logcheck-tool
+.PHONY: default all patch-on-startup help to_uuid randpw slackpretty dbtzoom twofactorauth logcheck-tool
 
 
 # help is at the top so it is default
@@ -59,13 +59,6 @@ randpw: Makefile
 	@echo "Installing the randpw command"
 	touch ${HOME}/.bash_aliases
 	grep -q -P '(randpw\(\) |alias randpw=)' ${HOME}/.bash_aliases || echo 'randpw() { for i in 16 24 32 48; do echo == $${i} digits ==; apg -a 1 -n 5 -m $${i} -x $${i} -MCLN; done }' >> ${HOME}/.bash_aliases
-
-## html_character_parser	: Install the "html_character_parser" command which encodes and decodes strings into HTML
-html_character_parser: Makefile
-	@echo "Installing the html_character_parser command"
-	touch ${HOME}/.bash_aliases
-	chmod +x ${CURRENT_DIR}/html_character_parser/html_character_reference.py
-	grep -q -F 'alias html_character_parser=' ${HOME}/.bash_aliases || echo 'alias html_character_parser="${CURRENT_DIR}/html_character_parser/html_character_reference.py"' >> ${HOME}/.bash_aliases
 
 ## slackpretty		: Install the "slackpretty" command which turns slacks poor copy paste text into better markup for humans.
 slackpretty: Makefile
@@ -135,5 +128,5 @@ default: patch-on-startup to_uuid randpw slackpretty dbtzoom twofactorauth logch
 	@echo "Default scripts have been installed"
 
 ## all			: Install all scripts provided by this repo
-all: patch-on-startup to_uuid randpw html_character_parser slackpretty dbtzoom twofactorauth logcheck-tool
+all: patch-on-startup to_uuid randpw slackpretty dbtzoom twofactorauth logcheck-tool
 	@echo "All scripts have been installed"
