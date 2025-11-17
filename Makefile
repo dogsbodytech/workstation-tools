@@ -10,9 +10,6 @@
 # 	Check make version
 #	Support being called from other directories
 #	Skip user input if variable set
-#	Check MPC is installed before installing musicpi
-#	Musicpi install doesn't clear down settings file
-# 	Musicpi install doesn't work for the port
 
 # sanity checks
 ifneq ($(OVERRIDE),TRUE)
@@ -40,7 +37,7 @@ SHELL=/usr/bin/env bash
 CURRENT_DIR := $(shell pwd)
 
 # List of commands that should run even if a file is created with the same name
-.PHONY: default all patch-on-startup help markdown html_character_parser to_uuid randpw musicpi slackpretty dbtzoom twofactorauth newrelic_alerts logcheck-tool
+.PHONY: default all patch-on-startup help markdown html_character_parser to_uuid randpw slackpretty dbtzoom twofactorauth newrelic_alerts logcheck-tool
 
 
 # help is at the top so it is default
@@ -81,28 +78,6 @@ slackpretty: Makefile
 	@echo "Installing the slackpretty command"
 	touch ${HOME}/.bash_aliases
 	grep -q -F 'alias slackpretty=' ${HOME}/.bash_aliases || echo 'alias slackpretty="bash ${CURRENT_DIR}/slackpretty/slackpretty.sh"' >> ${HOME}/.bash_aliases
-
-## musicpi			: Install the "musicpi" wrapper script to control a mopidy server
-musicpi: Makefile
-	@echo "Installing the musicpi command"
-# wildcard = empty string if the file doesn't exist
-ifeq ($(wildcard ${CURRENT_DIR}/patch-on-startup/settings.local), "")
-	@echo "No saved config"
-	echo "# WARNING: Do not manually edit" > ${CURRENT_DIR}/patch-on-startup/settings.local
-	echo "# File contents are auto-generated via makefile" >> ${CURRENT_DIR}/patch-on-startup/settings.local
-	@echo "What is the IP address of your mopidy instance? (Default: localhost)"
-	@read USERINPUT; sed -r 's|([^\ ]*)|"\1"|g; s|^|ADDR=(|; s|$$|)|' <<< $${USERINPUT} >> ${CURRENT_DIR}/musicpi/settings.local
-	#@echo "What is the port for this instance? (Default: 6060)"
-	#@read USERINPUT; sed -r 's|([^\ ]*)|"\1"|g; s|^|PASS=(|; s|$$|)|' <<< $${USERINPUT} >> ${CURRENT_DIR}/musicpi/settings.local
-	@echo "What is the password for this instance? (Default: blank)"
-	@read USERINPUT; sed -r 's|([^\ ]*)|"\1"|g; s|^|PASS=(|; s|$$|)|' <<< $${USERINPUT} >> ${CURRENT_DIR}/musicpi/settings.local
-endif
-	touch ${HOME}/.bash_aliases
-	touch ${HOME}/.bash_completion
-	sed 's|$$REPOHOME|${CURRENT_DIR}|g' ${CURRENT_DIR}/musicpi/spotipi.sh > ${CURRENT_DIR}/live/spotipi.sh
-	sed 's|$$REPOHOME|${CURRENT_DIR}|g' ${CURRENT_DIR}/musicpi/musicpi-bash-completion > ${CURRENT_DIR}/live/musicpi-bash-completion
-	grep -q -F 'alias musicpi=' ${HOME}/.bash_aliases || echo 'alias musicpi="bash ${CURRENT_DIR}/live/spotipi.sh"' >> ${HOME}/.bash_aliases
-	grep -q -P 'live/musicpi-bash-completion$$' ${HOME}/.bash_completion || echo '. ${CURRENT_DIR}/live/musicpi-bash-completion' >> ${HOME}/.bash_completion
 
 ## patch-on-startup	: Install the patch on startup script
 patch-on-startup: Makefile
@@ -172,5 +147,5 @@ default: patch-on-startup markdown to_uuid randpw slackpretty dbtzoom twofactora
 	@echo "Default scripts have been installed"
 
 ## all			: Install all scripts provided by this repo
-all: patch-on-startup to_uuid randpw html_character_parser musicpi slackpretty dbtzoom twofactorauth newrelic_alerts logcheck-tool
+all: patch-on-startup to_uuid randpw html_character_parser slackpretty dbtzoom twofactorauth newrelic_alerts logcheck-tool
 	@echo "All scripts have been installed"
