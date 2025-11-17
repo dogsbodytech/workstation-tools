@@ -37,7 +37,7 @@ SHELL=/usr/bin/env bash
 CURRENT_DIR := $(shell pwd)
 
 # List of commands that should run even if a file is created with the same name
-.PHONY: default all patch-on-startup help markdown html_character_parser to_uuid randpw slackpretty dbtzoom twofactorauth newrelic_alerts logcheck-tool
+.PHONY: default all patch-on-startup help markdown html_character_parser to_uuid randpw slackpretty dbtzoom twofactorauth logcheck-tool
 
 
 # help is at the top so it is default
@@ -130,12 +130,6 @@ twofactorauth: Makefile
 	touch ${HOME}/.bash_aliases
 	grep -q -P 'dbtoauth\(\)' ${HOME}/.bash_aliases || echo 'dbtoauth() { tty=$$(tty); oathtool --totp --base32 "$$@" | tee $${tty} | xclip -i -selection clipboard; echo "Copied to clipboard!"; }' >> ${HOME}/.bash_aliases
 
-## newrelic_alerts		: Install the new relic alerts setup script
-newrelic_alerts: Makefile
-	@echo "Installing Newrelic Alerts"
-	touch ${HOME}/.bash_aliases
-	grep -q -F 'alias configure_newrelic_alerts=' ${HOME}/.bash_aliases || echo 'alias configure_newrelic_alerts="python3 ${CURRENT_DIR}/newrelic-alerts/NewRelic_alerts.py"' >> ${HOME}/.bash_aliases
-
 ## logcheck-tool		: Install the logcheck setup tool
 logcheck-tool: Makefile
 	@echo "Installing logcheck-tool"
@@ -143,9 +137,9 @@ logcheck-tool: Makefile
 	grep -q -F 'alias logcheck-tool=' ${HOME}/.bash_aliases || echo 'alias logcheck-tool="python3 ${CURRENT_DIR}/logcheck-tool/logcheck-tool.py"' >> ${HOME}/.bash_aliases
 
 ## default			: Install core scripts provided by this repo
-default: patch-on-startup markdown to_uuid randpw slackpretty dbtzoom twofactorauth newrelic_alerts logcheck-tool
+default: patch-on-startup markdown to_uuid randpw slackpretty dbtzoom twofactorauth logcheck-tool
 	@echo "Default scripts have been installed"
 
 ## all			: Install all scripts provided by this repo
-all: patch-on-startup to_uuid randpw html_character_parser slackpretty dbtzoom twofactorauth newrelic_alerts logcheck-tool
+all: patch-on-startup to_uuid randpw html_character_parser slackpretty dbtzoom twofactorauth logcheck-tool
 	@echo "All scripts have been installed"
