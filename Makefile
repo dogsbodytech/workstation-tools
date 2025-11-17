@@ -40,7 +40,7 @@ SHELL=/usr/bin/env bash
 CURRENT_DIR := $(shell pwd)
 
 # List of commands that should run even if a file is created with the same name
-.PHONY: default all patch-on-startup help markdown html_character_parser from_epoch panic-phone to_uuid randpw musicpi slackpretty dbtzoom twofactorauth newrelic_alerts logcheck-tool
+.PHONY: default all patch-on-startup help markdown html_character_parser panic-phone to_uuid randpw musicpi slackpretty dbtzoom twofactorauth newrelic_alerts logcheck-tool
 
 
 # help is at the top so it is default
@@ -68,13 +68,6 @@ randpw: Makefile
 	@echo "Installing the randpw command"
 	touch ${HOME}/.bash_aliases
 	grep -q -P '(randpw\(\) |alias randpw=)' ${HOME}/.bash_aliases || echo 'randpw() { for i in 16 24 32 48; do echo == $${i} digits ==; apg -a 1 -n 5 -m $${i} -x $${i} -MCLN; done }' >> ${HOME}/.bash_aliases
-
-## from_epoch		: Install the "from_epoch" command which converts time from epoch into gregorian
-from_epoch: Makefile
-	@echo "Installing the from_epoch command"
-	touch ${HOME}/.bash_aliases
-	chmod +x ${CURRENT_DIR}/from_epoch/from_epoch.py
-	grep -q -F 'alias from_epoch=' ${HOME}/.bash_aliases || echo 'alias from_epoch="${CURRENT_DIR}/from_epoch/from_epoch.py"' >> ${HOME}/.bash_aliases
 
 ## html_character_parser	: Install the "html_character_parser" command which encodes and decodes strings into HTML
 html_character_parser: Makefile
@@ -192,5 +185,5 @@ default: patch-on-startup markdown to_uuid randpw slackpretty dbtzoom twofactora
 	@echo "Default scripts have been installed"
 
 ## all			: Install all scripts provided by this repo
-all: patch-on-startup to_uuid randpw from_epoch html_character_parser musicpi slackpretty panic-phone dbtzoom twofactorauth newrelic_alerts logcheck-tool
+all: patch-on-startup to_uuid randpw html_character_parser musicpi slackpretty panic-phone dbtzoom twofactorauth newrelic_alerts logcheck-tool
 	@echo "All scripts have been installed"
