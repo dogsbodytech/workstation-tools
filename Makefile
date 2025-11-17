@@ -40,7 +40,7 @@ SHELL=/usr/bin/env bash
 CURRENT_DIR := $(shell pwd)
 
 # List of commands that should run even if a file is created with the same name
-.PHONY: default all patch-on-startup help markdown html_character_parser panic-phone to_uuid randpw musicpi slackpretty dbtzoom twofactorauth newrelic_alerts logcheck-tool
+.PHONY: default all patch-on-startup help markdown html_character_parser to_uuid randpw musicpi slackpretty dbtzoom twofactorauth newrelic_alerts logcheck-tool
 
 
 # help is at the top so it is default
@@ -81,19 +81,6 @@ slackpretty: Makefile
 	@echo "Installing the slackpretty command"
 	touch ${HOME}/.bash_aliases
 	grep -q -F 'alias slackpretty=' ${HOME}/.bash_aliases || echo 'alias slackpretty="bash ${CURRENT_DIR}/slackpretty/slackpretty.sh"' >> ${HOME}/.bash_aliases
-
-## panic-phone		: Install the "panic-phone" tool. Which opens gedit with a custom template + filename.
-panic-phone: Makefile
-	@echo "Installing the panic-phone tool"
-	hash gedit
-	mkdir -p ${CURRENT_DIR}/var/panic-phone/
-	sed 's|$$REPOHOME|${CURRENT_DIR}|g' ${CURRENT_DIR}/panic-phone/panic-phone.desktop.template > ${CURRENT_DIR}/live/panic-phone.desktop
-	chmod +x ${CURRENT_DIR}/live/panic-phone.desktop
-	chmod +x ${CURRENT_DIR}/panic-phone/panic-phone.sh
-	[[ -r ${CURRENT_DIR}/live/panic-phone-template.txt ]] || cp ${CURRENT_DIR}/panic-phone/message-template.txt ${CURRENT_DIR}/live/panic-phone-template.txt
-	@echo "To customise your phone call template edit ${CURRENT_DIR}/live/panic-phone-template.txt"
-	@echo "We recommend pinning ${CURRENT_DIR}/live/panic-phone.desktop to your desktop launcher/dock"
-
 
 ## musicpi			: Install the "musicpi" wrapper script to control a mopidy server
 musicpi: Makefile
@@ -185,5 +172,5 @@ default: patch-on-startup markdown to_uuid randpw slackpretty dbtzoom twofactora
 	@echo "Default scripts have been installed"
 
 ## all			: Install all scripts provided by this repo
-all: patch-on-startup to_uuid randpw html_character_parser musicpi slackpretty panic-phone dbtzoom twofactorauth newrelic_alerts logcheck-tool
+all: patch-on-startup to_uuid randpw html_character_parser musicpi slackpretty dbtzoom twofactorauth newrelic_alerts logcheck-tool
 	@echo "All scripts have been installed"
