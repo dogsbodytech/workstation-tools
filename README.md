@@ -35,6 +35,4 @@ If you are developing any tools for this repo please follow these points:
 * If there are any variables that need setting for your script to work they should be prompted by the make file
   * And then stored in a file called "settings.local" in the script directory. 
   * This file is automatically git ignored. 
-* Any shared settings/resources/librarys should go in the "shared" directory. 
-  * Further shared item segregation is detailed in the "shared" README file. 
-  
+* Any files that are created should be put in the "live" directory. 
