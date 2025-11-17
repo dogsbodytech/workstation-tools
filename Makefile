@@ -117,12 +117,6 @@ twofactorauth: Makefile
 	touch ${HOME}/.bash_aliases
 	grep -q -P 'dbtoauth\(\)' ${HOME}/.bash_aliases || echo 'dbtoauth() { tty=$$(tty); oathtool --totp --base32 "$$@" | tee $${tty} | xclip -i -selection clipboard; echo "Copied to clipboard!"; }' >> ${HOME}/.bash_aliases
 
-## logcheck-tool		: Install the logcheck setup tool
-logcheck-tool: Makefile
-	@echo "Installing logcheck-tool"
-	touch ${HOME}/.bash_aliases
-	grep -q -F 'alias logcheck-tool=' ${HOME}/.bash_aliases || echo 'alias logcheck-tool="python3 ${CURRENT_DIR}/logcheck-tool/logcheck-tool.py"' >> ${HOME}/.bash_aliases
-
 ## default			: Install core scripts provided by this repo
 default: patch-on-startup to_uuid randpw slackpretty dbtzoom twofactorauth logcheck-tool
 	@echo "Default scripts have been installed"
