@@ -21,7 +21,7 @@ error ()
   echo "  #       #   #   #   #   #    #  #   #  "
   echo "  ######  #    #  #    #   ####   #    # "
   echo " "
-  read -p "Press enter to continue"
+  read -r -p "Press enter to continue"
 }
 
 waitforapt()
@@ -40,7 +40,6 @@ waitforapt()
     sleep 0.5
     ((i=i+1))
   done
-  echo ""
 }
 
 waitfornetwork()
@@ -55,29 +54,28 @@ waitfornetwork()
       3 ) j="/" ;;
     esac
     echo -en "\r[${j}] Cannot connect to the Ubuntu repos, retrying... hold 's' to skip or 'q' to quit." 
-    read -t 0.5 -N1 input
-    if [[ $input == "s" ]] || [[ $input == "S" ]]; then
+    read -r -t 0.5 -N1 INPUT
+    if [[ $INPUT == "s" ]] || [[ $INPUT == "S" ]]; then
       break
-    elif [[ $input == "q" ]] || [[ $input == "Q" ]] ; then
+    elif [[ $INPUT == "q" ]] || [[ $INPUT == "Q" ]] ; then
       exit
     fi
     ((i=i+1))
   done
-  echo ""
 }
 
 if [ "${1}" = "subscript" ]; then
   # REPOHOME Variable set by make file
   source $REPOHOME/patch-on-startup/settings.local
 
-  TEMPFILE=`mktemp`
-  # Running sudo now so that it's cached
+  TEMPFILE=$(mktemp)
   echo
   echo "Dogsbody Technology Environment Setup"
   echo "====================================="
   waitfornetwork
   echo
   echo "Getting sudo privilege to install latest updates"
+  # Running sudo now so that it's cached
   sudo date
   # If there are problems running `sudo date` then exit.
   if [ ${?} != 0 ]; then
@@ -109,48 +107,63 @@ if [ "${1}" = "subscript" ]; then
     echo
   fi
 
-
   # apt-get update does not produce an exit codes for some errors
   # we want to pause on warnings and errors too
   echo "Getting Updates"
   echo "==============="
   waitforapt
-  sudo apt-get update 2>&1 | tee ${TEMPFILE} || echo E: update failed | tee ${TEMPFILE}
-  if grep -q '^[WE]:' ${TEMPFILE}; then
+  sudo apt-get update 2>&1 | tee "${TEMPFILE}" || echo E: update failed | tee "${TEMPFILE}"
+  if grep -q '^[WE]:' "${TEMPFILE}"; then
     error
   fi
   echo
+
   # Patching
   echo "Patching"
   echo "========"
   waitforapt
-  sudo apt-get -y dist-upgrade | tee ${TEMPFILE} || error
-  if ! grep -q '^0 to upgrade, 0 to newly install,' ${TEMPFILE}; then
+  sudo apt-get -y dist-upgrade | tee "${TEMPFILE}" || error
+  if ! grep -q '^0 to upgrade, 0 to newly install,' "${TEMPFILE}"; then
     INSTALLS=$(tail -4 /var/log/apt/history.log | grep "^Install:" | sed 's|^Install: ||' | xargs -d"," -n2 | column -t | sed 's|^|  |g')
     UPGRADES=$(tail -4 /var/log/apt/history.log | grep "^Upgrade:" | sed 's|^Upgrade: ||' | xargs -d"," -n2 | column -t | sed 's|^|  |g')
   fi
   echo
+  
   # Cleanup
   echo "Cleanup"
   echo "======="
   waitforapt
-  sudo apt-get -y autoremove | tee ${TEMPFILE} || error
-  if ! grep -q '^0 to upgrade, 0 to newly install,' ${TEMPFILE}; then
+  sudo apt-get -y autoremove | tee "${TEMPFILE}" || error
+  if ! grep -q '^0 to upgrade, 0 to newly install,' "${TEMPFILE}"; then
     REMOVE=$(tail -4 /var/log/apt/history.log | grep "^Remove:" | sed 's|^Remove: ||' | xargs -d"," -n1 | column -t | sed 's|^|  |g')
   fi
   echo
+  
   # Chmod PEM files - Need to ask user where PEM files are stored.. if any..
   echo "Chmodding PEM files"
   echo "==================="
   # Check user set paths to check
   if [[ ! -z ${USER_INPUT_PATHS} ]]; then 
-    for userpath in ${USER_INPUT_PATHS[@]}; do
-      if [ -d $userpath ]; then
-        find $userpath -type f -name "*.pem" -exec chmod 600 {} + || error
+    for USERPATH in ${USER_INPUT_PATHS[@]}; do
+      if [ -d "$USERPATH" ]; then
+        echo "Checking $USERPATH"
+        find "$USERPATH" -type f -name "*.pem" -exec chmod 600 {} + || error
       fi
     done
   fi
   echo
+
+  # Check the latest kubectx files are pulled down when possible
+  if [ -f $REPOHOME/../dbh_tools/bin/check_repo.sh -a -d $REPOHOME/../kubectx ]; then
+      $REPOHOME/../dbh_tools/bin/check_repo.sh $REPOHOME/../kubectx
+  fi
+
+  # Backup dotfiles
+  echo "Backing up dotfiles to MyFiles/dotfiles"
+  echo "======================================="
+  "$REPOHOME/patch-on-startup/backup-dotfiles.sh" || echo "Dotfiles backup failed"
+  echo
+
   # Check Vagrant
   if hash vagrant 2>/dev/null; then
     echo "Checking latest Vagrant is installed"
@@ -161,16 +174,8 @@ if [ "${1}" = "subscript" ]; then
     curl -sS https://raw.githubusercontent.com/hashicorp/vagrant/stable-website/version.txt | grep -o "${VAGRANTCURRENT}" || VAGRANTUPDATENEEDED='YES'
     echo
   fi
-  # Can we use Cowsay?
-  echo "Cowsay"
-  echo "======"
-  if hash cowsay 2>/dev/null; then
-    COWSAY=`cowsay -l | sed  '1d;s/ /\n/g' | sort -R | tail -1`
-    echo "Using Cowsay: ${COWSAY}"
-  else
-    echo "Not using Cowsay, install it with \`sudo apt-get install cowsay\`"
-  fi
-  echo
+  
+  # Check we have the latest repo
   echo "Checking workstation tools git repo"
   echo "==================================="
   cd $REPOHOME
@@ -185,17 +190,18 @@ if [ "${1}" = "subscript" ]; then
     GITUPDATE+=$(git diff origin/master --stat)
   fi
   echo
+
   # Cleanup
   rm "${TEMPFILE}"
-  # A nice report to keep Rob happy :-)
   # Swap clear for printing clear char to avoid clearing scrollback
   printf "\33[H\33[2J"
   echo
   if hash toilet 2>/dev/null; then
     echo " Dogsbody Technology" | toilet -F gay -t -f smmono12
   else
-    if [[ ${COWSAY} ]]; then
-      cowsay -f ${COWSAY} "Welcome ${LOGNAME^} have a productive day."
+    if hash cowsay 2>/dev/null; then
+      COWSAY=$(cowsay -l | sed  '1d;s/ /\n/g' | sort -R | tail -1)
+      cowsay -f "${COWSAY}" "Welcome ${LOGNAME^} have a productive day."
     else
       echo "Welcome ${LOGNAME^} have a productive day."
     fi
@@ -220,15 +226,7 @@ if [ "${1}" = "subscript" ]; then
     echo "New version of Vagrant available."
     echo
   fi
-  # Check the latest kubectx files are pulled down when possible
-  if [ -f $REPOHOME/../dbh_tools/bin/check_repo.sh -a -d $REPOHOME/../kubectx ]; then
-      $REPOHOME/../dbh_tools/bin/check_repo.sh $REPOHOME/../kubectx
-  fi
-  # Backup dotfiles
-  echo "Backing up dotfiles to MyFiles/dotfiles"
-  echo "======================================="
-  "$REPOHOME/patch-on-startup/backup-dotfiles.sh" || echo "Dotfiles backup failed"
-  echo
+
   # Final summary and prompt
   if [[ ${GITUPDATE} == "false" ]]; then
     echo "Warning: The workstation-tools repo is no longer git controlled."
@@ -239,7 +237,7 @@ if [ "${1}" = "subscript" ]; then
     echo
   fi
   echo
-  read -p "Press enter key to close"
+  read -r -p "Press enter key to close"
 else
   gnome-terminal --maximize -- bash -c "bash \"${0}\" subscript"
 fi
