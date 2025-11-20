@@ -107,7 +107,7 @@ dbtzoom: Makefile
 	@read -p "What is the Zoom Meeting ID? " ROOMID; \
 	read -p "What is the HTML encoded password for this room? " ROOMPASSWORD; \
 	CLEANROOM=`echo -e "$${ROOMID}" | tr -d '[:space:]'`; \
-	sed -i -n -e '/^alias dbtzoom=/!p' -e "\$$aalias dbtzoom=\'xdg-open \"https://us02web.zoom.us/j/$$CLEANROOM?pwd=$$ROOMPASSWORD\"\'" ${HOME}/.bash_aliases
+	sed -i -n -e '/^alias dbtzoom=/!p' -e "\$$aalias dbtzoom=\'xdg-open \"zoommtg://zoom.us/join?confno=$$CLEANROOM&pwd=$$ROOMPASSWORD&zc=0\"\'" ${HOME}/.bash_aliases
 
 ## twofactorauth		: Install the "dbtoauth" shortcut to simplify 2fa
 twofactorauth: Makefile
