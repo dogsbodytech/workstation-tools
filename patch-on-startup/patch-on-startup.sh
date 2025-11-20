@@ -153,28 +153,12 @@ if [ "${1}" = "subscript" ]; then
   fi
   echo
 
-  # Check the latest kubectx files are pulled down when possible
-  if [ -f $REPOHOME/../dbh_tools/bin/check_repo.sh -a -d $REPOHOME/../kubectx ]; then
-      $REPOHOME/../dbh_tools/bin/check_repo.sh $REPOHOME/../kubectx
-  fi
-
   # Backup dotfiles
   echo "Backing up dotfiles to MyFiles/dotfiles"
   echo "======================================="
   "$REPOHOME/patch-on-startup/backup-dotfiles.sh" || echo "Dotfiles backup failed"
   echo
 
-  # Check Vagrant
-  if hash vagrant 2>/dev/null; then
-    echo "Checking latest Vagrant is installed"
-    echo "================================="
-    VAGRANTCURRENT=$(vagrant --version | sed -n '1p' | grep -o "[0-9]*\.[0-9]*\.[0-9]*")
-    echo "Local Current Version: ${VAGRANTCURRENT}"
-    echo -n "Testing against latest release  "
-    curl -sS https://raw.githubusercontent.com/hashicorp/vagrant/stable-website/version.txt | grep -o "${VAGRANTCURRENT}" || VAGRANTUPDATENEEDED='YES'
-    echo
-  fi
-  
   # Check we have the latest repo
   echo "Checking workstation tools git repo"
   echo "==================================="
@@ -220,10 +204,6 @@ if [ "${1}" = "subscript" ]; then
   if [[ ${REMOVE} ]]; then
     echo "Removed:"
     echo "${REMOVE}"
-    echo
-  fi
-  if [[ ${VAGRANTUPDATENEEDED} ]]; then
-    echo "New version of Vagrant available."
     echo
   fi
 
