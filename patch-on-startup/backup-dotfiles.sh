@@ -37,6 +37,7 @@ EXCLUDES=(
   ".thunderbird"
   ".minikube/cache"
   ".kube/cache"
+  ".var"
 )
 
 # Check for non-dotfiles in $DEST and ask for confirmation before removal
