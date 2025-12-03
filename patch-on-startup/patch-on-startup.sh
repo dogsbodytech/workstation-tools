@@ -153,6 +153,12 @@ if [ "${1}" = "subscript" ]; then
   fi
   echo
 
+  # add user-local bin to PATH
+  echo "Checking ~/.local/bin"
+  echo "====================="
+  mkdir -p $HOME/.local/bin
+  grep -Fqx 'if [ -d "$HOME/.local/bin" ] ; then' $HOME/.bashrc || printf '\nif [ -d "$HOME/.local/bin" ] ; then\n    PATH="$HOME/.local/bin:$PATH"\nfi\n\n' >> $HOME/.bashrc
+
   # Backup dotfiles
   echo "Backing up dotfiles to MyFiles/dotfiles"
   echo "======================================="
