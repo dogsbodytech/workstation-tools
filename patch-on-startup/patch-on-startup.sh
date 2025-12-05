@@ -5,11 +5,6 @@
 #
 # Description:  A script to setup and maintain the dogsbody workstation environment.
 #
-# Usage: Add this to your Ubuntu Startup Applications as follows
-#        Name: Patch On Startup
-#        Command: bash "/path/to/patch-on-startup.sh"
-#        Comment: Patch On Startup
-#
 
 error ()
 {
@@ -64,9 +59,10 @@ waitfornetwork()
   done
 }
 
+SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+
 if [ "${1}" = "subscript" ]; then
-  # REPOHOME Variable set by make file
-  source $REPOHOME/patch-on-startup/settings.local
+  source $SCRIPTDIR/settings.local
 
   TEMPFILE=$(mktemp)
   echo
@@ -158,26 +154,26 @@ if [ "${1}" = "subscript" ]; then
   echo "====================="
   mkdir -p $HOME/.local/bin
   grep -Fqx 'if [ -d "$HOME/.local/bin" ] ; then' $HOME/.bashrc || printf '\nif [ -d "$HOME/.local/bin" ] ; then\n    PATH="$HOME/.local/bin:$PATH"\nfi\n\n' >> $HOME/.bashrc
+  echo
 
   # Backup dotfiles
   echo "Backing up dotfiles to MyFiles/dotfiles"
   echo "======================================="
-  "$REPOHOME/patch-on-startup/backup-dotfiles.sh" || echo "Dotfiles backup failed"
+  "$SCRIPTDIR/backup-dotfiles.sh" || echo "Dotfiles backup failed"
   echo
 
   # Check we have the latest repo
   echo "Checking workstation tools git repo"
   echo "==================================="
-  cd $REPOHOME
   hash stat
   hash git
-  if [ ! -d "$REPOHOME/.git" ]; then
-    echo "Error: $REPOHOME is not a git repo"
+  if [ ! -d "$SCRIPTDIR/../.git" ]; then
+    echo "Error: $SCRIPTDIR/../ is not a git repo"
     GITUPDATE="false"
     error
   else
-    GITUPDATE=$(git fetch --quiet)
-    GITUPDATE+=$(git diff origin/master --stat)
+    GITUPDATE=$(git -C "$SCRIPTDIR/../" fetch --quiet)
+    GITUPDATE+=$(git -C "$SCRIPTDIR/../" diff origin/master --stat)
   fi
   echo
 
@@ -225,5 +221,9 @@ if [ "${1}" = "subscript" ]; then
   echo
   read -r -p "Press enter key to close"
 else
-  gnome-terminal --maximize -- bash -c "bash \"${0}\" subscript"
+  for i in {1..12}; do
+    gnome-terminal --maximize -- bash -lc "bash \"$0\" subscript" && exit 0
+    sleep 5
+  done
+  exit 1
 fi

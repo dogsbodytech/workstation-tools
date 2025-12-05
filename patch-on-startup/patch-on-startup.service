@@ -1,0 +1,13 @@
+[Unit]
+Description=Patch On Startup (interactive)
+After=graphical-session.target
+Wants=graphical-session.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/env bash %h/GitRepos/workstation-tools/patch-on-startup/patch-on-startup.sh
+TimeoutStartSec=5min
+
+[Install]
+WantedBy=default.target
+

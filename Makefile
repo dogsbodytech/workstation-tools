@@ -69,16 +69,17 @@ patch-on-startup: Makefile
 	@echo "Installing the patch-on-startup script"
 ifeq ($(shell [[ -r ${CURRENT_DIR}/patch-on-startup/settings.local ]] && echo "exists"),exists)
 	@echo "Config file already exists, skipping config prompts."
+	@echo "# Delete this file and run 'make patch-on-startup' to reset" >> ${CURRENT_DIR}/patch-on-startup/settings.local
 else
-	echo "# File contents are auto-generated via makefile" > ${CURRENT_DIR}/patch-on-startup/settings.local
-	echo "# Delete this file and run 'make patch-on-startup' to reset" >> ${CURRENT_DIR}/patch-on-startup/settings.local
 	@echo "This script can update .pem key permissions for you."
 	@echo "Which paths would you like checked? This is a space deliminated array."
 	@read USERINPUT; sed -r 's|([^\ ]*)|"\1"|g; s|^|USER_INPUT_PATHS=(|; s|$$|)|' <<< $${USERINPUT} >> ${CURRENT_DIR}/patch-on-startup/settings.local
 endif
-	sed 's|$$REPOHOME|${CURRENT_DIR}|g' ${CURRENT_DIR}/patch-on-startup/patch-on-startup.sh > ${CURRENT_DIR}/live/patch-on-startup.sh
-	mkdir -p ~/.config/autostart
-	sed 's|$$REPOHOME|${CURRENT_DIR}|g' ${CURRENT_DIR}/patch-on-startup/patchonstartup.desktop.template > ~/.config/autostart/patchonstartup.desktop
+	@rm -f ${CURRENT_DIR}/live/patch-on-startup.sh ~/.config/autostart/patchonstartup.desktop # tidy up old scripts
+	@mkdir -p ~/.config/systemd/user/
+	@cp ${CURRENT_DIR}/patch-on-startup/patch-on-startup.service ~/.config/systemd/user/patch-on-startup.service
+	@systemctl --user daemon-reload
+	@systemctl --user enable patch-on-startup.service
 
 ## freeagent-timer		: Install the freeagent timer script
 freeagent-timer: Makefile
