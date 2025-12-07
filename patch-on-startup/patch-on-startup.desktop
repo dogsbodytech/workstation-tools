@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Exec=/usr/bin/env bash -lc "bash \\$HOME/GitRepos/workstation-tools/patch-on-startup/patch-on-startup.sh"
+Hidden=false
+NoDisplay=false
+X-GNOME-Autostart-enabled=true
+Name[en_GB]=Patch On Startup
+Name=Patch On Startup
+Comment[en_GB]=
+Comment=
