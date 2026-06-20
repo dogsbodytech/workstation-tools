@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-DEST="$HOME/MyFiles/dotfiles"
+DEST="$HOME/MyFiles/dotfiles_$(hostname -s)"
 mkdir -p "$DEST"
 
 RSYNC_LOG="$(mktemp)"
@@ -29,15 +29,16 @@ fi
 # List of noisy dotfolders to exclude
 EXCLUDES=(
   ".cache"
+  ".config"
+  ".kube/cache"
   ".local"
+  ".minikube/cache"
+  ".mozilla"
+  ".thunderbird"
   ".Trash"
+  ".var"
   ".vscode"
   ".zoom"
-  ".config"
-  ".thunderbird"
-  ".minikube/cache"
-  ".kube/cache"
-  ".var"
 )
 
 # Check for non-dotfiles in $DEST and ask for confirmation before removal
