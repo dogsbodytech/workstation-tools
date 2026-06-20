@@ -222,8 +222,16 @@ if [ "${1}" = "subscript" ]; then
   read -r -p "Press enter key to close"
 else
   for i in {1..12}; do
-    gnome-terminal --maximize -- bash -lc "bash \"$0\" subscript" && exit 0
+    if command -v ptyxis >/dev/null 2>&1; then
+      ptyxis --maximize -- bash -lc "bash \"$0\" subscript" && exit 0
+    elif command -v gnome-terminal >/dev/null 2>&1; then
+      gnome-terminal --maximize -- bash -lc "bash \"$0\" subscript" && exit 0
+    else
+      echo "No supported terminal emulator found" >&2
+      exit 1
+    fi
     sleep 5
   done
   exit 1
 fi
+
