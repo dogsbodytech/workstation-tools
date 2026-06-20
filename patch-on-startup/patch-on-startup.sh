@@ -103,12 +103,12 @@ if [ "${1}" = "subscript" ]; then
     echo
   fi
 
-  # apt-get update does not produce an exit codes for some errors
+  # apt update does not produce an exit codes for some errors
   # we want to pause on warnings and errors too
   echo "Getting Updates"
   echo "==============="
   waitforapt
-  sudo apt-get update 2>&1 | tee "${TEMPFILE}" || echo E: update failed | tee "${TEMPFILE}"
+  sudo apt update 2>&1 | tee "${TEMPFILE}" || echo E: update failed | tee "${TEMPFILE}"
   if grep -q '^[WE]:' "${TEMPFILE}"; then
     error
   fi
@@ -118,7 +118,7 @@ if [ "${1}" = "subscript" ]; then
   echo "Patching"
   echo "========"
   waitforapt
-  sudo apt-get -y dist-upgrade | tee "${TEMPFILE}" || error
+  sudo apt -y dist-upgrade | tee "${TEMPFILE}" || error
   if ! grep -q '^0 to upgrade, 0 to newly install,' "${TEMPFILE}"; then
     INSTALLS=$(tail -4 /var/log/apt/history.log | grep "^Install:" | sed 's|^Install: ||' | xargs -d"," -n2 | column -t | sed 's|^|  |g')
     UPGRADES=$(tail -4 /var/log/apt/history.log | grep "^Upgrade:" | sed 's|^Upgrade: ||' | xargs -d"," -n2 | column -t | sed 's|^|  |g')
@@ -129,7 +129,7 @@ if [ "${1}" = "subscript" ]; then
   echo "Cleanup"
   echo "======="
   waitforapt
-  sudo apt-get -y autoremove | tee "${TEMPFILE}" || error
+  sudo apt -y autoremove | tee "${TEMPFILE}" || error
   if ! grep -q '^0 to upgrade, 0 to newly install,' "${TEMPFILE}"; then
     REMOVE=$(tail -4 /var/log/apt/history.log | grep "^Remove:" | sed 's|^Remove: ||' | xargs -d"," -n1 | column -t | sed 's|^|  |g')
   fi
