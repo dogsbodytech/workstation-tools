@@ -76,10 +76,6 @@ else
 	@echo "Which paths would you like checked? This is a space deliminated array."
 	@read USERINPUT; sed -r 's|([^\ ]*)|"\1"|g; s|^|USER_INPUT_PATHS=(|; s|$$|)|' <<< $${USERINPUT} >> ${CURRENT_DIR}/patch-on-startup/settings.local
 endif
-	@systemctl --user disable patch-on-startup.service 2&>/dev/null || true
-	@rm -f ${CURRENT_DIR}/live/patch-on-startup.sh ~/.config/autostart/patchonstartup.desktop ~/.config/systemd/user/patch-on-startup.service
-	@systemctl --user daemon-reload
-	@# The above three lines can be removed next time this file is edited
 	@mkdir -p ~/.config/autostart
 	@cp ${CURRENT_DIR}/patch-on-startup/patch-on-startup.desktop ~/.config/autostart/patch-on-startup.desktop
 
